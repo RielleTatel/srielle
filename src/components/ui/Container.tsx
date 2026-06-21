@@ -8,7 +8,7 @@ type ContainerProps = HTMLAttributes<HTMLDivElement> & {
 export function Container({ children, className, ...rest }: ContainerProps) {
   return (
     <div
-      className={twMerge("mx-auto w-full max-w-5xl px-6 sm:px-8", className)}
+      className={twMerge("mx-auto w-full max-w-6xl px-6 sm:px-10", className)}
       {...rest}
     >
       {children}
