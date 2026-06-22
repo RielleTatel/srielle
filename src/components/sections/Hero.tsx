@@ -1,13 +1,7 @@
-import NoirFlow from "@/components/NoirFlow";
+import SilkFlow from "@/components/ui/SilkFlow";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
-
-const METRICS = [
-  { value: "3+", label: "Years Building Software" },
-  { value: "Build with AI", label: "Speaker" },
-  { value: "Student", label: "Leader" },
-  { value: "ASEAN", label: "Delegate" },
-];
+import { Button } from "@/components/ui/Button";
 
 export function Hero() {
   return (
@@ -16,40 +10,52 @@ export function Hero() {
       className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden py-24"
     >
       <div className="absolute inset-0">
-        <NoirFlow speed={0.5} />
+        <SilkFlow
+          color="#b2d1ed"
+          speed={0.15}
+          scale={2.5}
+          warpStrength={6.0}
+          contrast={0.6}
+        />
       </div>
 
       <Container className="relative z-10">
-        <div className="flex flex-col items-start gap-10">
+        <div className="flex flex-col items-center ">
           <FadeIn immediate delay={0.05}>
-            <h1
-              className="text-foreground"
+            <p
+              className="text-foreground text-3xl"
               style={{
                 fontWeight: 700,
                 letterSpacing: "-0.06em",
                 lineHeight: 0.95,
-                fontSize: "clamp(4rem, 10vw, 8rem)",
+                fontSize: "clamp(4rem, 10vw, 5rem)",
+                textAlign: "center",
               }}
             >
-              Building software,
+              BUILDING SOFTWARE,
               <br />
-              communities,
+              COMMUNITIES,
               <br />
-              and opportunities.
-            </h1>
+              <span className="text-accent">AND OPPORTUNTIES.</span>
+            </p>
           </FadeIn>
 
-          <FadeIn immediate delay={0.4} className="w-full">
-            <dl className="mt-12 grid w-full grid-cols-2 gap-x-8 gap-y-10 border-t border-border pt-10 sm:grid-cols-4">
-              {METRICS.map((metric) => (
-                <div key={metric.label} className="flex flex-col gap-1">
-                  <dt className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                    {metric.value}
-                  </dt>
-                  <dd className="text-sm text-muted">{metric.label}</dd>
-                </div>
-              ))}
-            </dl>
+          <FadeIn immediate delay={0.2}>
+            <p className="mt-6 max-w-2xl text-center text-base text-muted sm:text-lg">
+              From web applications to community initiatives, I turn ideas into
+              experiences that make a lasting impact.
+            </p>
+          </FadeIn>
+
+          <FadeIn immediate delay={0.35}>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Button href="#projects" variant="primary">
+                View my work
+              </Button>
+              <Button href="#contact" variant="secondary">
+                Get in touch
+              </Button>
+            </div>
           </FadeIn>
         </div>
       </Container>
