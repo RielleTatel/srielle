@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f4f2;
-  --foreground: #111111;
-  --muted: #666666;
-  --accent: #003a70;
-  --border: rgba(17, 17, 17, 0.08);
+  --background: #181714;
+  --foreground: #ffffff;
+  --muted: #928b7d;
+  --accent: #7c9b73;          /* software + communities */
+  --opportunity: #7c9b73;     /* opportunities */
+
+  --border: rgba(240, 235, 224, 0.08);
 }
 
 @theme inline {
@@ -64,9 +66,9 @@ body::after {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.08;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch' seed='4'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.62' numOctaves='2' stitchTiles='stitch' seed='4'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   background-size: 240px 240px;
 }
 

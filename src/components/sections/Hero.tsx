@@ -2,6 +2,8 @@ import SilkFlow from "@/components/ui/SilkFlow";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Button } from "@/components/ui/Button";
+import { BlurTextEffect } from "@/components/ui/BlurTextEffect";
+import { KineticTextSwapper } from "@/components/ui/KineticTextSwapper";
 
 export function Hero() {
   return (
@@ -9,16 +11,6 @@ export function Hero() {
       id="hero"
       className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden py-24"
     >
-      <div className="absolute inset-0">
-        <SilkFlow
-          color="#b2d1ed"
-          speed={0.15}
-          scale={2.5}
-          warpStrength={6.0}
-          contrast={0.6}
-        />
-      </div>
-
       <Container className="relative z-10">
         <div className="flex flex-col items-center ">
           <FadeIn immediate delay={0.05}>
@@ -28,34 +20,49 @@ export function Hero() {
                 fontWeight: 700,
                 letterSpacing: "-0.06em",
                 lineHeight: 0.95,
-                fontSize: "clamp(4rem, 10vw, 5rem)",
+                fontSize: "clamp(5rem, 10vw, 2rem)",
                 textAlign: "center",
               }}
             >
-              BUILDING SOFTWARE,
+              <BlurTextEffect
+                text="BUILDING SOFTWARE,"
+                blurDirection="both"
+                blurIntensity={3}
+                blurWidth={10}
+              />
               <br />
-              COMMUNITIES,
+              <BlurTextEffect
+                text="COMMUNITIES,"
+                blurDirection="both"
+                blurIntensity={3}
+                blurWidth={22}
+              />
               <br />
-              <span className="text-accent">AND OPPORTUNTIES.</span>
+              <BlurTextEffect
+                text="AND OPPORTUNTIES."
+                className="text-accent"
+                blurDirection="both"
+                blurIntensity={3}
+                blurWidth={30}
+              />
             </p>
           </FadeIn>
 
           <FadeIn immediate delay={0.2}>
             <p className="mt-6 max-w-2xl text-center text-base text-muted sm:text-lg">
-              From web applications to community initiatives, I turn ideas into
-              experiences that make a lasting impact.
+              From web applications to community initiatives, I turn ideas into{" "}
+              <KineticTextSwapper
+                words={[
+                  "experiences",
+                  "products",
+                  "solutions",
+                  "communities",
+                  "opportunities",
+                  "impact",
+                ]}
+                className="text-foreground font-medium"
+              />
             </p>
-          </FadeIn>
-
-          <FadeIn immediate delay={0.35}>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Button href="#projects" variant="primary">
-                View my work
-              </Button>
-              <Button href="#contact" variant="secondary">
-                Get in touch
-              </Button>
-            </div>
           </FadeIn>
         </div>
       </Container>
