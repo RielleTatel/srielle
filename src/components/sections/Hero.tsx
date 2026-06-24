@@ -10,7 +10,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden pt-8 pb-24"
+      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden py-24"
     >
       <Container className="relative z-10">
         <div className="flex flex-col items-center ">
@@ -80,7 +80,8 @@ export function Hero() {
             </p>
           </FadeIn>
         </div>
-      </Container>
+      </Container> 
+
     </section>
   );
 }
