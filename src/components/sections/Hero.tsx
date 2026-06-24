@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SilkFlow from "@/components/ui/SilkFlow";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -9,13 +10,27 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden py-24"
+      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden pt-8 pb-24"
     >
       <Container className="relative z-10">
         <div className="flex flex-col items-center ">
+          <FadeIn immediate delay={0.02}>
+              <span className="relative inline-block h-40 w-40 overflow-hidden">
+                <Image
+                  src="/logo.svg"
+                  alt="Srielle logo"
+                  fill
+                  sizes="50px"
+                  className="object-cover"
+                  priority
+                />
+              </span>
+
+          </FadeIn>
+
           <FadeIn immediate delay={0.05}>
             <p
-              className="text-foreground text-3xl"
+              className="text-foreground text-3xl -mt-8"
               style={{
                 fontWeight: 700,
                 letterSpacing: "-0.06em",
@@ -50,7 +65,7 @@ export function Hero() {
 
           <FadeIn immediate delay={0.2}>
             <p className="mt-6 max-w-2xl text-center text-base text-muted sm:text-lg">
-              From web applications to community initiatives, I turn ideas into{" "}
+              From web applications to real impactful initiatives, I turn ideas into{" "}
               <KineticTextSwapper
                 words={[
                   "experiences",
