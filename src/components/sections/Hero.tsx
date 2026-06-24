@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import SilkFlow from "@/components/ui/SilkFlow";
 import { Container } from "@/components/ui/Container";
@@ -6,11 +11,39 @@ import { Button } from "@/components/ui/Button";
 import { BlurTextEffect } from "@/components/ui/BlurTextEffect";
 import { KineticTextSwapper } from "@/components/ui/KineticTextSwapper";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const mm = gsap.matchMedia();
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.to(section, {
+        opacity: 0,
+        filter: "blur(12px)",
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
+        },
+      });
+    });
+
+    return () => mm.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
-      className="relative flex min-h-[calc(100svh-4rem)] items-center overflow-hidden py-24"
+      className="relative flex min-h-[calc(100svh-8rem)] items-center overflow-hidden will-change-[opacity,filter]"
     >
       <Container className="relative z-10">
         <div className="flex flex-col items-center ">
