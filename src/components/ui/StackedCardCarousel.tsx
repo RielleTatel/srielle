@@ -5,8 +5,10 @@ import { useEffect, useRef, useState, startTransition } from "react";
 
 export type StackedCardItem = {
   image: { src: string; alt?: string };
+  heading?: string;
   title: string;
   category: string;
+  tags?: string[];
 };
 
 type FontStyle = {
@@ -94,7 +96,7 @@ export function StackedCardCarousel({
   categoryBackground = "color-mix(in srgb, var(--foreground) 6%, transparent)",
   categoryTextColor = "var(--muted)",
   titleFont = {
-    fontSize: "22px",
+    fontSize: "15px",
     variant: "Semibold",
     letterSpacing: "-0.01em",
     lineHeight: "1.4em",
@@ -118,9 +120,9 @@ export function StackedCardCarousel({
   scaleReduction = 0.08,
   animationSpeed = 260,
   dragThreshold = 50,
-  cardPadding = 32,
+  cardPadding = 20,
   imageBorderRadius = 20,
-  contentPadding = 40,
+  contentPadding = 24,
   forceMobileView = false,
 }: StackedCardCarouselProps) {
   const isControlled = controlledActiveIndex !== undefined;
@@ -337,7 +339,7 @@ export function StackedCardCarousel({
                   width: "100%",
                   height: "60%",
                   padding: isMobile
-                    ? `${cardPadding * 0.625}px ${cardPadding * 0.625}px 0 ${cardPadding * 0.625}px`
+                    ? `${cardPadding * 1.625}px ${cardPadding * 0.625}px 0 ${cardPadding * 0.625}px`
                     : `${cardPadding}px ${cardPadding}px 0 ${cardPadding}px`,
                   display: "flex",
                   alignItems: "center",
@@ -383,35 +385,67 @@ export function StackedCardCarousel({
               >
 
                 
-                <div>  
-
-                  <span
+                <div>
+                  {card.heading ? (
+                    <h3
+                      style={{
+                        margin: 0,
+                        marginBottom: isMobile ? "6px" : "8px",
+                        color: textColor,
+                        fontWeight: 700,
+                        letterSpacing: "-0.03em",
+                        lineHeight: 1.15,
+                        fontSize: isMobile
+                          ? "clamp(1.1rem, 4vw, 1.35rem)"
+                          : "clamp(1.4rem, 2.2vw, 1.875rem)",
+                      }}
+                    >
+                      {card.heading}
+                    </h3>
+                  ) : null}
+                  <div
                     style={{
-                      backgroundColor: categoryBackground,
-                      color: categoryTextColor,
-                      padding: isMobile ? "6px 14px" : "8px 16px",
-                      borderRadius: "20px",
-                      ...categoryFont,
-                      fontSize: isMobile
-                        ? `${parseFloat(categoryFont.fontSize) * 0.85}px`
-                        : categoryFont.fontSize,
+                      display: "flex",
+                      flexWrap: "wrap",
+                      alignItems: "center",
+                      gap: isMobile ? "4px" : "6px",
+                      marginBottom: isMobile ? "8px" : "10px",
                     }}
                   >
-                    {card.category}
-                  </span> 
-                  <p
-                    style={{
-                      margin: 0,
-                      color: metadataColor,
-                      ...metadataFont,
-                      fontSize: isMobile
-                        ? `${parseFloat(metadataFont.fontSize) * 0.85}px`
-                        : metadataFont.fontSize,
-                      marginBottom: isMobile ? "12px" : "16px",
-                    }}
-                  >
-   
-                  </p>
+                    <span
+                      style={{
+                        backgroundColor: categoryBackground,
+                        color: categoryTextColor,
+                        padding: isMobile ? "6px 14px" : "8px 16px",
+                        borderRadius: "999px",
+                        ...categoryFont,
+                        fontSize: isMobile
+                          ? `${parseFloat(categoryFont.fontSize) * 0.85}px`
+                          : categoryFont.fontSize,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {card.category}
+                    </span>
+                    {card.tags?.map((tag) => (
+                      <span
+                        key={tag}
+                        style={{
+                          backgroundColor: categoryBackground,
+                          color: categoryTextColor,
+                          padding: isMobile ? "6px 14px" : "8px 16px",
+                          borderRadius: "999px",
+                          ...categoryFont,
+                          fontSize: isMobile
+                            ? `${parseFloat(categoryFont.fontSize) * 0.85}px`
+                            : categoryFont.fontSize,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                   <h2
                     style={{
                       margin: 0,
@@ -424,16 +458,7 @@ export function StackedCardCarousel({
                     }}
                   >
                     {card.title}
-                  </h2> 
-
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
+                  </h2>
                 </div>
               </div>
             </motion.div>
