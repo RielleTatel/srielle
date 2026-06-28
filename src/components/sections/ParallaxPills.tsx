@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FadeText } from "@/components/ui/FadeText";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -153,7 +154,7 @@ export function ParallaxPills() {
         <div className="absolute inset-0 z-10 flex items-center justify-center px-6 text-center">
           <div className="max-w-2xl">
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
-              Scroll
+              <FadeText>Scroll</FadeText>
             </p>
             <h2
               className="mt-4 text-foreground"
@@ -164,14 +165,10 @@ export function ParallaxPills() {
                 fontSize: "clamp(2.5rem, 6vw, 5rem)",
               }}
             >
-              The goal
-              was never
-              just to code.
+              <FadeText>The goal was never just to code.</FadeText>
               <br />
-                <span className="text-[#82A079]"> 
-                  The goal
-                  was always
-                  to create impact.
+                <span className="text-[#82A079]">
+                  <FadeText delay={0.25}>The goal was always to create impact.</FadeText>
                 </span>
             </h2>
           </div>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { AnimatePresence, motion } from "motion/react";
 import {
   StackedCardCarousel,
   type StackedCardItem,
@@ -13,6 +14,7 @@ import {
   type ThreeDPillItem,
 } from "@/components/ui/ThreeDPillCarousel";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { FadeText } from "@/components/ui/FadeText";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -161,10 +163,10 @@ export function About() {
     <section ref={sectionRef} id="about" className="px-15 pt-6 pb-6">
       <SectionHeading
         eyebrow="Beyond the Code"
-        title="About Me."
+        title={<FadeText>About Me.</FadeText>}
         className="mb-2"
       />
-      <div className="grid items-center gap-2 lg:grid-cols-4">
+      <div className="grid items-center  lg:grid-cols-4">
         <div className="h-[540px] w-full overflow-hidden rounded-3xl lg:col-span-3">
           <StackedCardCarousel
             cards={STACKED_CARDS}
@@ -174,12 +176,22 @@ export function About() {
         </div>
         <div className="flex h-[540px] w-full flex-col items-center justify-between gap-4 lg:col-span-1">
           <div className="w-full text-center">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
-              {activeEntry.positionTitle}
-            </p>
-            <p className="mt-2 text-sm text-foreground/80 leading-snug">
-              {activeEntry.positionOrg}
-            </p>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                  {activeEntry.positionTitle}
+                </p>
+                <p className="mt-2 text-sm text-foreground/80 leading-snug">
+                  {activeEntry.positionOrg}
+                </p>
+              </motion.div>
+            </AnimatePresence>
           </div>
           <div className="w-full flex-1">
             <ThreeDPillCarousel
@@ -189,19 +201,26 @@ export function About() {
               onActiveIndexChange={handleActiveIndexChange}
             />
           </div>
-          <p
-            className="w-full text-center"
-            style={{
-              color: "var(--accent)",
-              fontStyle: "italic",
-              fontWeight: 600,
-              letterSpacing: "-0.02em",
-              lineHeight: 1.2,
-              fontSize: "clamp(1rem, 1.4vw, 1.25rem)",
-            }}
-          >
-            {activeEntry.slogan}
-          </p>
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={activeIndex}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full text-center"
+              style={{
+                color: "var(--accent)",
+                fontStyle: "italic",
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.2,
+                fontSize: "clamp(1rem, 1.4vw, 1.25rem)",
+              }}
+            >
+              {activeEntry.slogan}
+            </motion.p>
+          </AnimatePresence>
         </div>
       </div>
     </section>

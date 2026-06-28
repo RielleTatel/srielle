@@ -5,6 +5,8 @@ import { Hero } from "@/components/sections/Hero";
 import { ParallaxPills } from "@/components/sections/ParallaxPills";
 import { Projects } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
+import { StatementHeading } from "@/components/sections/StatementHeading";
+import { TechStack } from "@/components/sections/TechStack";
 
 export default function Home() {
   return (
@@ -12,9 +14,9 @@ export default function Home() {
       <Hero />
       <ParallaxPills />
       <About />
+      <TechStack />
       <Projects />
-      <Experience />
-      <Skills />
+      <StatementHeading />
       <Contact />
     </main>
   );

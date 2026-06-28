@@ -262,10 +262,7 @@ export function ThreeDPillCarousel({
                   height: "100%",
                   borderRadius: `${cardBorderRadius}px`,
                   overflow: "hidden",
-                  boxShadow:
-                    hoveredIndex === index && !isCenter
-                      ? "0 25px 70px rgba(0, 0, 0, 0.4)"
-                      : cardShadow,
+
                   transition: "box-shadow 0.3s ease",
                   border: isCenter
                     ? `${activeBorderWidth}px solid ${activeBorderColor}`
