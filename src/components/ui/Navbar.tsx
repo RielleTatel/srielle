@@ -12,7 +12,7 @@ const NAV_LINKS = [
 
 export function Navbar() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-md transition-colors duration-[1600ms]">
       <Container className="flex h-16 items-center justify-between">
         <Link href="/" aria-label="Srielle home" className="inline-flex items-center">
           <Image

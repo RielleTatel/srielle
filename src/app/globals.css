@@ -8,6 +8,23 @@
   --opportunity: #7c9b73;     /* opportunities */
 
   --border: rgba(240, 235, 224, 0.08);
+
+  --pill-gradient: linear-gradient(180deg, #7c9b73, #928b7d, #ffffff);
+  --grid-line: #3a3730;
+}
+
+/* Light-mode palette toggled by ParallaxPills while its pinned scroll is active.
+   Same accent family, inverted lightness — keeps the green identity intact. */
+html.light-mode {
+  --background: #f5f7f1;
+  --foreground: #1f3318;
+  --muted: #6b8a63;
+  --accent: #3d5d36;
+  --opportunity: #3d5d36;
+  --border: rgba(61, 93, 54, 0.16);
+
+  --pill-gradient: linear-gradient(180deg, #c8d8c1, #7c9b73, #1f3318);
+  --grid-line: rgba(124, 155, 115, 0.22);
 }
 
 @theme inline {
@@ -24,6 +41,7 @@ html,
 body {
   background: var(--background);
   color: var(--foreground);
+  transition: background-color 1.0s ease, color 1.0s ease;
 }
 
 body {
