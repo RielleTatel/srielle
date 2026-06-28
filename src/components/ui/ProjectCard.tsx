@@ -31,6 +31,15 @@ export function ProjectCard({ project, reversed = false }: ProjectCardProps) {
           {project.title}
         </h3>
 
+        {project.tagline && (
+          <p
+            className="text-base italic"
+            style={{ color: "var(--accent)" }}
+          >
+            {project.tagline}
+          </p>
+        )}
+
         <p className="text-base leading-relaxed text-muted">
           {project.description}
         </p>
