@@ -96,66 +96,43 @@ export function Contact() {
         </FadeIn>
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12">
-          <FadeIn>
-            <div className="flex h-full flex-col gap-6">
-              <figure className="relative overflow-hidden rounded-3xl border border-border bg-foreground/[0.02]">
-                <div className="relative aspect-[4/5] w-full">
-                  <Image
-                    src="/contact/portrait.png"
-                    alt="Portrait of Gabrielle Tatel"
-                    fill
-                    sizes="(min-width: 1024px) 36vw, 90vw"
-                    className="object-cover"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+          <FadeIn className="h-full">
+            <figure className="relative h-full min-h-[520px] overflow-hidden rounded-3xl border border-border bg-foreground/[0.02]">
+              <Image
+                src="/contact/portrait.png"
+                alt="Portrait of Gabrielle Tatel"
+                fill
+                sizes="(min-width: 1024px) 36vw, 90vw"
+                className="object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+              <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6">
+                <div>
+                  <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/55">
+                    Currently available
+                  </p>
+                  <p className="mt-2 text-xl font-semibold tracking-tight text-white">
+                    Gabrielle Tatel
+                  </p>
+                  <p className="text-sm text-white/70">
+                    Full-Stack Developer · Speaker · Student Leader
+                  </p>
                 </div>
-                <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6">
-                  <div>
-                    <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/55">
-                      Currently available
-                    </p>
-                    <p className="mt-2 text-xl font-semibold tracking-tight text-white">
-                      Gabrielle Tatel
-                    </p>
-                    <p className="text-sm text-white/70">
-                      Full-Stack Developer · Speaker · Student Leader
-                    </p>
-                  </div>
-                  <span
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 backdrop-blur-md"
-                    aria-label="Status: open to opportunities"
-                  >
-                    <span className="relative inline-flex h-1.5 w-1.5">
-                      <span className="absolute inset-0 animate-ping rounded-full bg-[var(--accent)] opacity-75" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                    </span>
-                    Open
+                <span
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 backdrop-blur-md"
+                  aria-label="Status: open to opportunities"
+                >
+                  <span className="relative inline-flex h-1.5 w-1.5">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-[var(--accent)] opacity-75" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
                   </span>
-                </figcaption>
-              </figure>
-
-              <ul className="flex flex-col gap-2">
-                <InfoRow
-                  icon={<Clock3 size={16} strokeWidth={1.6} />}
-                  title="When I'm around"
-                  body="Mon — Fri · 8:00 AM – 6:00 PM PHT"
-                />
-                <InfoRow
-                  icon={<MapPin size={16} strokeWidth={1.6} />}
-                  title="Where to find me"
-                  body="Zamboanga City, Philippines"
-                />
-                <InfoRow
-                  icon={<Mail size={16} strokeWidth={1.6} />}
-                  title="Email me directly"
-                  body="tatelgabrielle19@gmail.com"
-                  href="mailto:tatelgabrielle19@gmail.com"
-                />
-              </ul>
-            </div>
+                  Open
+                </span>
+              </figcaption>
+            </figure>
           </FadeIn>
 
-          <FadeIn delay={0.15}>
+          <FadeIn delay={0.15} className="h-full">
             <form
               onSubmit={handleSubmit}
               noValidate
@@ -255,6 +232,27 @@ export function Contact() {
             </form>
           </FadeIn>
         </div>
+
+        <FadeIn delay={0.2}>
+          <ul className="mt-8 grid gap-2 sm:grid-cols-3">
+            <InfoRow
+              icon={<Clock3 size={16} strokeWidth={1.6} />}
+              title="When I'm around"
+              body="Mon — Fri · 8:00 AM – 6:00 PM PHT"
+            />
+            <InfoRow
+              icon={<MapPin size={16} strokeWidth={1.6} />}
+              title="Where to find me"
+              body="Zamboanga City, Philippines"
+            />
+            <InfoRow
+              icon={<Mail size={16} strokeWidth={1.6} />}
+              title="Email me directly"
+              body="tatelgabrielle19@gmail.com"
+              href="mailto:tatelgabrielle19@gmail.com"
+            />
+          </ul>
+        </FadeIn>
       </div>
     </section>
   );

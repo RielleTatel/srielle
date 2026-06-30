@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, startTransition } from "react";
 export type StackedCardItem = {
   image: { src: string; alt?: string };
   heading?: string;
-  title: string;
+  title?: string;
   category: string;
   tags?: string[];
 };
@@ -26,6 +26,7 @@ type StackedCardCarouselProps = {
   cardBackground?: string;
   textColor?: string;
   metadataColor?: string;
+  activeDotColor?: string;
   categoryBackground?: string;
   categoryTextColor?: string;
   titleFont?: FontStyle;
@@ -93,6 +94,7 @@ export function StackedCardCarousel({
   cardBackground = "color-mix(in srgb, var(--background) 60%, transparent)",
   textColor = "var(--foreground)",
   metadataColor = "var(--muted)",
+  activeDotColor,
   categoryBackground = "color-mix(in srgb, var(--foreground) 6%, transparent)",
   categoryTextColor = "var(--muted)",
   titleFont = {
@@ -446,19 +448,21 @@ export function StackedCardCarousel({
                       </span>
                     ))}
                   </div>
-                  <h2
-                    style={{
-                      margin: 0,
-                      color: textColor,
-                      ...titleFont,
-                      fontSize: isMobile
-                        ? `${parseFloat(titleFont.fontSize) * 0.7}px`
-                        : titleFont.fontSize,
-                      lineHeight: "1.4",
-                    }}
-                  >
-                    {card.title}
-                  </h2>
+                  {card.title ? (
+                    <h2
+                      style={{
+                        margin: 0,
+                        color: textColor,
+                        ...titleFont,
+                        fontSize: isMobile
+                          ? `${parseFloat(titleFont.fontSize) * 0.7}px`
+                          : titleFont.fontSize,
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      {card.title}
+                    </h2>
+                  ) : null}
                 </div>
               </div>
             </motion.div>
@@ -486,7 +490,10 @@ export function StackedCardCarousel({
               width: index === activeIndex ? "24px" : "8px",
               height: "8px",
               borderRadius: "4px",
-              backgroundColor: index === activeIndex ? textColor : metadataColor,
+              backgroundColor:
+                index === activeIndex
+                  ? activeDotColor ?? textColor
+                  : metadataColor,
               border: "none",
               cursor: "pointer",
               transition: "all 0.3s",
