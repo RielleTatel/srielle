@@ -1,5 +1,65 @@
 @import "tailwindcss";
 
+@property --background {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #181714;
+}
+
+@property --foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #928b7d;
+}
+
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7c9b73;
+}
+
+@property --opportunity {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7c9b73;
+}
+
+@property --border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(240, 235, 224, 0.08);
+}
+
+@property --grid-line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #3a3730;
+}
+
+@property --pill-gradient-start {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7c9b73;
+}
+
+@property --pill-gradient-mid {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #928b7d;
+}
+
+@property --pill-gradient-end {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffffff;
+}
+
 :root {
   --background: #181714;
   --foreground: #ffffff;
@@ -9,7 +69,12 @@
 
   --border: rgba(240, 235, 224, 0.08);
 
-  --pill-gradient: linear-gradient(180deg, #7c9b73, #928b7d, #ffffff);
+  --pill-gradient: linear-gradient(
+    180deg,
+    var(--pill-gradient-start),
+    var(--pill-gradient-mid),
+    var(--pill-gradient-end)
+  );
   --grid-line: #3a3730;
 }
 
@@ -23,8 +88,24 @@ html.light-mode {
   --opportunity: #3d5d36;
   --border: rgba(61, 93, 54, 0.16);
 
-  --pill-gradient: linear-gradient(180deg, #c8d8c1, #7c9b73, #1f3318);
+  --pill-gradient-start: #c8d8c1;
+  --pill-gradient-mid: #7c9b73;
+  --pill-gradient-end: #1f3318;
   --grid-line: rgba(124, 155, 115, 0.22);
+}
+
+html {
+  transition:
+    --background 900ms ease-in-out,
+    --foreground 900ms ease-in-out,
+    --muted 900ms ease-in-out,
+    --accent 900ms ease-in-out,
+    --opportunity 900ms ease-in-out,
+    --border 900ms ease-in-out,
+    --grid-line 900ms ease-in-out,
+    --pill-gradient-start 900ms ease-in-out,
+    --pill-gradient-mid 900ms ease-in-out,
+    --pill-gradient-end 900ms ease-in-out;
 }
 
 @theme inline {
@@ -41,7 +122,6 @@ html,
 body {
   background: var(--background);
   color: var(--foreground);
-  transition: background-color 1.0s ease, color 1.0s ease;
 }
 
 body {
