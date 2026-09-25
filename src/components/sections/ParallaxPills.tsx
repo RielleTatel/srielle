@@ -71,7 +71,7 @@ export function ParallaxPills() {
           start: "top top",
           end: "+=500%",
           pin: true,
-          scrub: 0.5,
+          scrub: true,
           anticipatePin: 1,
         },
       });

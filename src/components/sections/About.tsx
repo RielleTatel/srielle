@@ -104,12 +104,13 @@ export function About() {
         start: "center center",
         end: () => `+=${(CARD_COUNT - 1) * SCROLL_PX_PER_CARD}`,
         pin: true,
-        scrub: 0.5,
+        scrub: true,
         anticipatePin: 1,
         snap: {
           snapTo: 1 / (CARD_COUNT - 1),
-          duration: 0.25,
-          delay: 0.05,
+          duration: 0.35,
+          delay: 0.2,
+          ease: "power1.inOut",
         },
         onUpdate(self) {
           const next = Math.round(self.progress * (CARD_COUNT - 1));

@@ -38,7 +38,7 @@ export function Hero() {
           trigger: section,
           start: "top top",
           end: "bottom top",
-          scrub: 0.5,
+          scrub: true,
         },
       });
     });
