@@ -1,4 +1,3 @@
-import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 import { Hero } from "@/components/sections/Hero";
 import { ParallaxPills } from "@/components/sections/ParallaxPills";
@@ -11,7 +10,6 @@ export default function Home() {
     <main>
       <Hero />
       <ParallaxPills />
-      <About />
       <TechStack />
       <Projects />
       <StatementHeading />

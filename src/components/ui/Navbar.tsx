@@ -3,10 +3,8 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 
 const NAV_LINKS = [
-  { href: "#about", label: "About" },
+  { href: "#tech-stack", label: "Tools" },
   { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
-  { href: "#skills", label: "Skills" },
   { href: "#contact", label: "Contact" },
 ];
 

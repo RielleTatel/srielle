@@ -69,7 +69,7 @@ export function ParallaxPills() {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=500%",
+          end: "+=250%",
           pin: true,
           scrub: true,
           anticipatePin: 1,
