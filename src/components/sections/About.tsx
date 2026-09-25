@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/StackedCardCarousel";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FadeText } from "@/components/ui/FadeText";
+import { useSmoothScrollReady } from "@/components/ui/SmoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -89,10 +90,11 @@ export function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<ScrollTrigger | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const isSmoothScrollReady = useSmoothScrollReady();
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section || CARD_COUNT < 2) return;
+    if (!isSmoothScrollReady || !section || CARD_COUNT < 2) return;
 
     const mm = gsap.matchMedia();
 
@@ -124,7 +126,7 @@ export function About() {
     });
 
     return () => mm.revert();
-  }, []);
+  }, [isSmoothScrollReady]);
 
   // Drag-to-swipe and dot-clicks call back here. Sync the page scroll so the
   // pinned section advances in lockstep — otherwise the next wheel tick would

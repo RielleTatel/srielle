@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeText } from "@/components/ui/FadeText";
+import { useSmoothScrollReady } from "@/components/ui/SmoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,10 +43,11 @@ const PILLS: Pill[] = [
 export function ParallaxPills() {
   const sectionRef = useRef<HTMLElement>(null);
   const pillRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const isSmoothScrollReady = useSmoothScrollReady();
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    if (!isSmoothScrollReady || !section) return;
 
     const mm = gsap.matchMedia();
 
@@ -128,7 +130,7 @@ export function ParallaxPills() {
     });
 
     return () => mm.revert();
-  }, []);
+  }, [isSmoothScrollReady]);
 
   return (
     <section ref={sectionRef} id="parallax-pills" className="relative">

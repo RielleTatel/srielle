@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSmoothScrollReady } from "@/components/ui/SmoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,10 +21,11 @@ export function ScrollSlideIn({
   className,
 }: ScrollSlideInProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const isSmoothScrollReady = useSmoothScrollReady();
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!isSmoothScrollReady || !el) return;
 
     const mm = gsap.matchMedia();
 
@@ -46,7 +48,7 @@ export function ScrollSlideIn({
     });
 
     return () => mm.revert();
-  }, [from, distance]);
+  }, [from, distance, isSmoothScrollReady]);
 
   return (
     <div ref={ref} className={className}>

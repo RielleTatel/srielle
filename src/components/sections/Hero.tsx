@@ -5,12 +5,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextPlugin } from "gsap/TextPlugin";
 import Image from "next/image";
-import SilkFlow from "@/components/ui/SilkFlow";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { Button } from "@/components/ui/Button";
 import { BlurTextEffect } from "@/components/ui/BlurTextEffect";
 import { KineticTextSwapper } from "@/components/ui/KineticTextSwapper";
+import { useSmoothScrollReady } from "@/components/ui/SmoothScroll";
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
@@ -22,10 +21,11 @@ export function Hero() {
   const subtitleRef = useRef<HTMLSpanElement>(null);
   const headlineRef = useRef<HTMLParagraphElement>(null);
   const [typingDone, setTypingDone] = useState(false);
+  const isSmoothScrollReady = useSmoothScrollReady();
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    if (!isSmoothScrollReady || !section) return;
 
     const mm = gsap.matchMedia();
 
@@ -44,7 +44,7 @@ export function Hero() {
     });
 
     return () => mm.revert();
-  }, []);
+  }, [isSmoothScrollReady]);
 
   useEffect(() => {
     const node = subtitleRef.current;
