@@ -1,7 +1,8 @@
 "use client";
 
 import { Fragment, type CSSProperties } from "react";
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
+import { usePrefersReducedMotion } from "@/components/ui/usePrefersReducedMotion";
 
 type FadeTextProps = {
   children: string;
@@ -22,7 +23,7 @@ export function FadeText({
   style,
   viewportAmount = 0.4,
 }: FadeTextProps) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const words = children.split(/(\s+)/).filter((part) => part.length > 0);
 
   if (reduce) {

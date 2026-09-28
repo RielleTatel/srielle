@@ -3,71 +3,71 @@
 @property --background {
   syntax: "<color>";
   inherits: true;
-  initial-value: #181714;
+  initial-value: #f5f7f1;
 }
 
 @property --foreground {
   syntax: "<color>";
   inherits: true;
-  initial-value: #ffffff;
+  initial-value: #1f3318;
 }
 
 @property --muted {
   syntax: "<color>";
   inherits: true;
-  initial-value: #928b7d;
+  initial-value: #526b4b;
 }
 
 @property --accent {
   syntax: "<color>";
   inherits: true;
-  initial-value: #7c9b73;
+  initial-value: #3d5d36;
 }
 
 @property --opportunity {
   syntax: "<color>";
   inherits: true;
-  initial-value: #7c9b73;
+  initial-value: #3d5d36;
 }
 
 @property --border {
   syntax: "<color>";
   inherits: true;
-  initial-value: rgba(240, 235, 224, 0.08);
+  initial-value: rgba(61, 93, 54, 0.16);
 }
 
 @property --grid-line {
   syntax: "<color>";
   inherits: true;
-  initial-value: #3a3730;
+  initial-value: rgba(124, 155, 115, 0.22);
 }
 
 @property --pill-gradient-start {
   syntax: "<color>";
   inherits: true;
-  initial-value: #7c9b73;
+  initial-value: #c8d8c1;
 }
 
 @property --pill-gradient-mid {
   syntax: "<color>";
   inherits: true;
-  initial-value: #928b7d;
+  initial-value: #7c9b73;
 }
 
 @property --pill-gradient-end {
   syntax: "<color>";
   inherits: true;
-  initial-value: #ffffff;
+  initial-value: #1f3318;
 }
 
 :root {
-  --background: #181714;
-  --foreground: #ffffff;
-  --muted: #928b7d;
-  --accent: #7c9b73;          /* software + communities */
-  --opportunity: #7c9b73;     /* opportunities */
+  --background: #f5f7f1;
+  --foreground: #1f3318;
+  --muted: #526b4b;
+  --accent: #3d5d36;
+  --opportunity: #3d5d36;
 
-  --border: rgba(240, 235, 224, 0.08);
+  --border: rgba(61, 93, 54, 0.16);
 
   --pill-gradient: linear-gradient(
     180deg,
@@ -75,23 +75,22 @@
     var(--pill-gradient-mid),
     var(--pill-gradient-end)
   );
-  --grid-line: #3a3730;
+  --grid-line: rgba(124, 155, 115, 0.22);
 }
 
-/* Light-mode palette toggled by ParallaxPills while its pinned scroll is active.
-   Same accent family, inverted lightness — keeps the green identity intact. */
-html.light-mode {
-  --background: #f5f7f1;
-  --foreground: #1f3318;
-  --muted: #6b8a63;
-  --accent: #3d5d36;
-  --opportunity: #3d5d36;
-  --border: rgba(61, 93, 54, 0.16);
+/* The landing page switches to this palette as the pill section enters view. */
+html.dark-mode {
+  --background: #181714;
+  --foreground: #ffffff;
+  --muted: #b2aa9b;
+  --accent: #91b086;
+  --opportunity: #91b086;
+  --border: rgba(240, 235, 224, 0.12);
 
-  --pill-gradient-start: #c8d8c1;
-  --pill-gradient-mid: #7c9b73;
-  --pill-gradient-end: #1f3318;
-  --grid-line: rgba(124, 155, 115, 0.22);
+  --pill-gradient-start: #7c9b73;
+  --pill-gradient-mid: #928b7d;
+  --pill-gradient-end: #ffffff;
+  --grid-line: #3a3730;
 }
 
 html {
@@ -106,6 +105,12 @@ html {
     --pill-gradient-start 900ms ease-in-out,
     --pill-gradient-mid 900ms ease-in-out,
     --pill-gradient-end 900ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    transition: none;
+  }
 }
 
 @theme inline {
@@ -171,7 +176,6 @@ body::after {
 }
 
 main,
-header,
 footer {
   position: relative;
   z-index: 10;

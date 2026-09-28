@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <ParallaxPills />
       <TechStack />
+      <ParallaxPills />
       <Projects />
       <StatementHeading />
       <Contact />

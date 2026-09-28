@@ -1,7 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { usePrefersReducedMotion } from "@/components/ui/usePrefersReducedMotion";
 
 type FadeInProps = {
   children: ReactNode;
@@ -19,7 +20,7 @@ export function FadeIn({
   immediate = false,
   y = 20,
 }: FadeInProps) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const initial = reduce ? { opacity: 1 } : { opacity: 0, y };
   const target = { opacity: 1, y: 0 };
   const transition = {

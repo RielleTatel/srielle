@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -21,6 +22,7 @@ export function useSmoothScrollReady() {
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const smoother = ScrollSmoother.create({
@@ -37,6 +39,38 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       smoother.kill();
     };
   }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    let frame = 0;
+    const syncScroll = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        const smoother = ScrollSmoother.get();
+        if (!smoother) return;
+
+        const hash = decodeURIComponent(window.location.hash.slice(1));
+        const target = hash ? document.getElementById(hash) : null;
+        if (target) {
+          smoother.scrollTo(
+            Math.max(0, smoother.offset(target, "top top") - 64),
+            false,
+          );
+        } else if (!hash) {
+          smoother.scrollTo(0, false);
+        }
+      });
+    };
+
+    syncScroll();
+    window.addEventListener("hashchange", syncScroll);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", syncScroll);
+    };
+  }, [isReady, pathname]);
 
   return (
     <SmoothScrollReadyContext.Provider value={isReady}>

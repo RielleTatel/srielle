@@ -1,14 +1,48 @@
+"use client";
+
+import type { MouseEvent } from "react";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 
 const NAV_LINKS = [
-  { href: "#tech-stack", label: "Tools" },
-  { href: "#projects", label: "Projects" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#hero", label: "Home" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/about", label: "About" },
+  { href: "/#tech-stack", label: "Tools", desktopOnly: true },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Navbar() {
+  const handleHomeAnchor = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (
+      !href.startsWith("/#") ||
+      window.location.pathname !== "/" ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) return;
+
+    const target = document.getElementById(href.slice(2));
+    if (!target) return;
+
+    event.preventDefault();
+    if (window.location.pathname + window.location.hash !== href) {
+      window.history.pushState(null, "", href);
+    }
+    ScrollTrigger.refresh();
+    const smoother = ScrollSmoother.get();
+    if (smoother) {
+      smoother.scrollTo(Math.max(0, smoother.offset(target, "top top") - 64), false);
+    } else {
+      target.scrollIntoView();
+    }
+  };
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-md transition-colors duration-[1600ms]">
       <Container className="flex h-16 items-center justify-between">
@@ -21,15 +55,16 @@ export function Navbar() {
             priority
           />
         </Link>
-        <nav className="hidden items-center gap-8 sm:flex">
+        <nav aria-label="Main navigation" className="flex items-center gap-3 sm:gap-8">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-muted transition-colors hover:text-foreground"
+              onClick={(event) => handleHomeAnchor(event, link.href)}
+              className={`text-xs text-muted transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:text-sm ${link.desktopOnly ? "hidden sm:inline" : ""}`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
       </Container>

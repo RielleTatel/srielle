@@ -49,22 +49,24 @@ export function ParallaxPills() {
     const section = sectionRef.current;
     if (!isSmoothScrollReady || !section) return;
 
+    const html = document.documentElement;
+    const enableDarkMode = () => html.classList.add("dark-mode");
+    const disableDarkMode = () => html.classList.remove("dark-mode");
+
+    const themeTrigger = ScrollTrigger.create({
+      trigger: section,
+      start: "top center",
+      onEnter: enableDarkMode,
+      onLeaveBack: disableDarkMode,
+      onRefresh(self) {
+        if (self.scroll() >= self.start) enableDarkMode();
+        else disableDarkMode();
+      },
+    });
+
     const mm = gsap.matchMedia();
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const html = document.documentElement;
-      const enableLightMode = () => html.classList.add("light-mode");
-      const disableLightMode = () => html.classList.remove("light-mode");
-
-      // Light mode latches on at the start of this section and stays on for every
-      // section below. It only reverts when the user scrolls back above the start.
-      const themeTrigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top center",
-        onEnter: enableLightMode,
-        onLeaveBack: disableLightMode,
-      });
-
       const masterTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -122,14 +124,16 @@ export function ParallaxPills() {
       });
 
       return () => {
-        themeTrigger.kill();
         masterTl.scrollTrigger?.kill();
         masterTl.kill();
-        disableLightMode();
       };
     });
 
-    return () => mm.revert();
+    return () => {
+      mm.revert();
+      themeTrigger.kill();
+      disableDarkMode();
+    };
   }, [isSmoothScrollReady]);
 
   return (

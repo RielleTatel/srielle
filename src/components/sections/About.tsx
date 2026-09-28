@@ -1,309 +1,156 @@
-"use client";
+import Image from "next/image";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { AnimatePresence, motion } from "motion/react";
-import { Quote } from "lucide-react";
-import {
-  StackedCardCarousel,
-  type StackedCardItem,
-} from "@/components/ui/StackedCardCarousel";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { FadeText } from "@/components/ui/FadeText";
-import { useSmoothScrollReady } from "@/components/ui/SmoothScroll";
-
-gsap.registerPlugin(ScrollTrigger);
-
-type AboutEntry = {
+type AboutStory = {
+  theme: string;
   title: string;
-  role: string;
-  slogan: string;
-  positionTitle: string;
-  positionOrg: string;
+  position: string;
+  organization: string;
   description: string;
-  tags: string[];
-  image: { src: string; alt: string };
+  image: { src: string; alt: string; position?: string };
+  caption: string;
 };
 
-const ENTRIES: AboutEntry[] = [
+const stories: AboutStory[] = [
   {
-    title: "Community Leadership",
-    role: "Community Builder",
-    slogan: "Building Communities Through Technology",
-    positionTitle: "President",
-    positionOrg:
-      "Google Developer Groups on Campus – Ateneo de Zamboanga University (2024–2025)",
+    theme: "Community leadership",
+    title: "Building developer communities",
+    position: "President",
+    organization: "Google Developer Groups on Campus, Ateneo de Zamboanga University (2024–2025)",
     description:
-      "Led a 60+ member technology community and organized initiatives that empowered students through hackathons, AI workshops, and developer programs. Spearheaded BlueCode: Zamboanga Hackathon 2025, the first city-wide hackathon in Zamboanga after the pandemic, helping revive the local tech ecosystem.",
-    tags: ["Leadership", "Community Building", "Hackathons", "Developer Relations"],
-    image: { src: "/aboutSection/blueCode.jpg", alt: "BlueCode Hackathon" },
+      "I led a 60+ member technology community through hackathons, AI workshops, and developer programs. I also spearheaded BlueCode: Zamboanga Hackathon 2025, the first citywide hackathon in Zamboanga after the pandemic, helping revive the local tech community.",
+    image: {
+      src: "/aboutSection/blueCode.jpg",
+      alt: "Participants and organizers at BlueCode: Zamboanga Hackathon 2025",
+    },
+    caption: "BlueCode: Zamboanga Hackathon 2025",
   },
   {
-    title: "Startup Innovation & Entrepreneurship",
-    role: "Startup Enthusiast",
-    slogan: "From Ideas to Impact",
-    positionTitle: "Lead Founder",
-    positionOrg: "Anyam (2025–Present)",
+    theme: "Entrepreneurship",
+    title: "Starting Anyam",
+    position: "Lead Founder",
+    organization: "Anyam (2025–Present)",
     description:
-      "Founded and led Anyam, a tourism technology startup focused on promoting underrepresented destinations through community-driven storytelling and digital innovation. The startup won the Regional Championship and later became a National Winning Team in the CHED Tourism Startup Challenge, securing ₱250,000 in implementation funding.",
-    tags: ["Entrepreneurship", "Innovation", "Product Strategy", "Full-Stack Development"],
-    image: { src: "/awards/awards2.jpg", alt: "Anyam award" },
+      "I founded Anyam to help underrepresented destinations tell their stories through technology. The team won the regional championship and later became a national winning team in the CHED Tourism Startup Challenge, securing ₱250,000 in implementation funding.",
+    image: {
+      src: "/awards/awards2.jpg",
+      alt: "The Anyam team receiving recognition at the Tourism Startup Challenge",
+    },
+    caption: "Anyam at the Tourism Startup Challenge",
   },
   {
-    title: "Competitive Debate & Public Advocacy",
-    role: "Competitive Debater",
-    slogan: "Ideas Worth Defending",
-    positionTitle: "Competitive Debater",
-    positionOrg: "Ateneo Debate Union",
+    theme: "Debate and advocacy",
+    title: "Making a case for ideas",
+    position: "Competitive Debater",
+    organization: "Ateneo Debate Union",
     description:
-      "Represent Ateneo de Zamboanga University in regional and national British Parliamentary debate tournaments, developing strong analytical thinking and communication under pressure. Recognized as a National Breaking Debater during the 36th National Debate Championship.",
-    tags: ["Debate", "Public Speaking", "Critical Thinking", "Argumentation"],
-    image: { src: "/debate/debate1.jpg", alt: "Debate tournament" },
+      "I represented Ateneo de Zamboanga University in regional and national British Parliamentary debate tournaments. Debate sharpened how I analyze a problem, listen under pressure, and make a clear case. I was recognized as a National Breaking Debater at the 36th National Debate Championship.",
+    image: {
+      src: "/debate/debate2.jpeg",
+      alt: "Gabrielle speaking at a debate event",
+      position: "center 40%",
+    },
+    caption: "Speaking with the Ateneo Debate Union",
   },
   {
-    title: "Technology Education & Community Engagement",
-    role: "Tech Speaker & Advocate",
-    slogan: "Sharing Knowledge, Inspiring Innovation",
-    positionTitle: "Technical Speaker & Community Volunteer",
-    positionOrg:
-      "Google Developer Groups • GDG Zamboanga • Community Events",
+    theme: "Technology education",
+    title: "Sharing what I learn",
+    position: "Technical Speaker and Community Volunteer",
+    organization: "GDG on Campus, GDG Zamboanga, and community events",
     description:
-      "Regularly speak at community-driven technology events, including Build with AI and BuildLabs, sharing practical insights on AI and modern software development. Through these engagements, I aim to make technology more accessible while encouraging continuous learning and innovation.",
-    tags: ["Developer Advocacy", "Artificial Intelligence", "Mentorship", "Workshops"],
-    image: { src: "/speaker/speaker1.jpg", alt: "Speaking engagement" },
+      "I speak at community technology events, including Build with AI and BuildLabs, to share practical ideas about AI and software development. These sessions are a way to make technical topics more approachable and help more people start building.",
+    image: {
+      src: "/speaker/speaker2.jpeg",
+      alt: "Gabrielle speaking during a Build with AI community event",
+      position: "center 42%",
+    },
+    caption: "Build with AI in Zamboanga",
   },
 ];
 
-const STACKED_CARDS: StackedCardItem[] = ENTRIES.map((entry) => ({
-  image: entry.image,
-  heading: entry.title,
-  category: entry.role,
-  tags: entry.tags,
-}));
-
-const CARD_COUNT = ENTRIES.length;
-const SCROLL_PX_PER_CARD = 1200;
-
 export function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const triggerRef = useRef<ScrollTrigger | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const isSmoothScrollReady = useSmoothScrollReady();
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!isSmoothScrollReady || !section || CARD_COUNT < 2) return;
-
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: "center center",
-        end: () => `+=${(CARD_COUNT - 1) * SCROLL_PX_PER_CARD}`,
-        pin: true,
-        scrub: true,
-        anticipatePin: 1,
-        snap: {
-          snapTo: 1 / (CARD_COUNT - 1),
-          duration: 0.35,
-          delay: 0.2,
-          ease: "power1.inOut",
-        },
-        onUpdate(self) {
-          const next = Math.round(self.progress * (CARD_COUNT - 1));
-          setActiveIndex((prev) => (prev === next ? prev : next));
-        },
-      });
-
-      triggerRef.current = trigger;
-
-      return () => {
-        triggerRef.current = null;
-        trigger.kill();
-      };
-    });
-
-    return () => mm.revert();
-  }, [isSmoothScrollReady]);
-
-  // Drag-to-swipe and dot-clicks call back here. Sync the page scroll so the
-  // pinned section advances in lockstep — otherwise the next wheel tick would
-  // snap the index back to whatever ScrollTrigger's progress still says.
-  const handleActiveIndexChange = (next: number) => {
-    setActiveIndex(next);
-    const trigger = triggerRef.current;
-    if (!trigger) return;
-    const targetProgress = next / (CARD_COUNT - 1);
-    const targetScroll =
-      trigger.start + targetProgress * (trigger.end - trigger.start);
-    const smoother = ScrollSmoother.get();
-    if (smoother) {
-      smoother.scrollTo(targetScroll, true);
-    } else {
-      window.scrollTo({ top: targetScroll, behavior: "smooth" });
-    }
-  };
-
-  const activeEntry = ENTRIES[activeIndex];
-  const totalLabel = String(CARD_COUNT).padStart(2, "0");
-  const currentLabel = String(activeIndex + 1).padStart(2, "0");
-
   return (
-    <section ref={sectionRef} id="about" className="px-15 pt-6 pb-6">
-      <SectionHeading
-        eyebrow="Beyond the Code"
-        title={<FadeText>About Me.</FadeText>}
-        description={
-          <FadeText delay={0.1}>
-            Software is one chapter. These are the others — leadership, advocacy, and the communities I build along the way.
-          </FadeText>
-        }
-        className="mb-6 items-center text-center"
-      />
-      <div className="grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.90fr)_minmax(0,1fr)]">
-        <div className="relative h-[555px] w-full overflow-hidden rounded-3xl border border-[var(--accent)]/15 bg-foreground/[0.025]">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -left-24 -top-24 h-64 w-64 rounded-full bg-[var(--accent)]/[0.18] blur-3xl"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-32 -right-20 h-56 w-56 rounded-full bg-[var(--accent)]/[0.08] blur-3xl"
-          />
-          <StackedCardCarousel
-            cards={STACKED_CARDS}
-            activeIndex={activeIndex}
-            onActiveIndexChange={handleActiveIndexChange}
-            activeDotColor="var(--accent)"
-          />
+    <>
+      <section className="mx-auto grid max-w-7xl gap-10 px-6 pb-20 pt-10 sm:px-10 sm:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-stretch lg:gap-16 lg:px-15 lg:pb-28 lg:pt-20">
+        <div className="flex flex-col justify-between py-2 lg:py-8">
+          <div>
+            <p className="mb-8 text-sm font-medium text-accent">Gabrielle Tatel · Zamboanga City</p>
+            <h1 className="max-w-2xl text-[clamp(4rem,8.5vw,8.5rem)] font-bold leading-[0.88] tracking-[-0.07em] text-foreground">
+              About me<span className="text-accent">.</span>
+            </h1>
+          </div>
+          <div className="mt-14 max-w-xl border-t border-border pt-7 lg:mt-10">
+            <p className="text-[clamp(1.5rem,2.6vw,2.25rem)] font-medium leading-tight tracking-[-0.035em] text-foreground">
+              I build products and the communities around them.
+            </p>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg">
+              I&apos;m a full-stack developer whose work also moves through student leadership, entrepreneurship, debate, and technology education. Each part shapes how I solve problems and work with people.
+            </p>
+          </div>
         </div>
 
-        <aside
-          aria-label="Chapter details"
-          className="relative flex h-[540px] w-full flex-col gap-6 overflow-hidden rounded-3xl border border-[var(--accent)]/15 bg-foreground/[0.025] p-7 backdrop-blur-sm sm:p-8"
-        >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[var(--accent)]/[0.18] blur-3xl"
+        <figure className="relative min-h-[420px] overflow-hidden rounded-[2rem] bg-[#181714] sm:min-h-[560px] lg:min-h-[680px]">
+          <Image
+            src="/contact/portrait.png"
+            alt="Portrait of Gabrielle Tatel"
+            fill
+            priority
+            sizes="(min-width: 1024px) 520px, (min-width: 640px) 80vw, 100vw"
+            className="object-cover object-[center_30%]"
           />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-32 -left-20 h-56 w-56 rounded-full bg-[var(--accent)]/[0.08] blur-3xl"
-          />
-          <div className="relative flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.18em] text-muted">
-            <span>
-              Chapter <span className="text-[var(--accent)]">{currentLabel}</span> / {totalLabel}
-            </span>
-            <span
-              aria-hidden
-              className="h-px flex-1 bg-gradient-to-r from-[var(--accent)]/40 via-border to-transparent"
-            />
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={activeEntry.role}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/[0.08] px-3 py-1 tracking-[0.16em] text-[var(--accent)]"
+        </figure>
+      </section>
+
+      <section id="about-stories" className="border-t border-border bg-background/80">
+        <div className="mx-auto max-w-7xl px-6 pb-20 pt-16 sm:px-10 lg:px-15 lg:pb-28 lg:pt-24">
+          <header className="mb-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.6fr)] lg:items-end lg:gap-12">
+            <h2 className="max-w-2xl text-[clamp(2.75rem,5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-foreground">
+              Beyond the code.
+            </h2>
+            <p className="max-w-md text-base leading-relaxed text-muted sm:text-lg">
+              The experiences that shape how I lead, think, and share what I know.
+            </p>
+          </header>
+
+          <div>
+            {stories.map((story, index) => (
+              <article
+                key={story.theme}
+                className="grid gap-8 border-t border-border py-12 sm:py-16 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-center lg:gap-16 lg:py-20"
               >
-                {activeEntry.role}
-              </motion.span>
-            </AnimatePresence>
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-              className="relative flex flex-1 flex-col justify-between gap-6"
-            >
-              <div className="flex flex-col gap-2">
-                <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted">
-                  Position
-                </p>
-                <h3
-                  className="text-foreground"
-                  style={{
-                    fontWeight: 700,
-                    letterSpacing: "-0.02em",
-                    lineHeight: 1.05,
-                    fontSize: "clamp(1.5rem, 2.4vw, 2.25rem)",
-                  }}
-                >
-                  {activeEntry.positionTitle}
-                </h3>
-                <p className="text-sm leading-relaxed text-muted">
-                  {activeEntry.positionOrg}
-                </p>
-                <p className="mt-3 text-sm leading-relaxed text-foreground/80">
-                  {activeEntry.description}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <span
-                  aria-hidden
-                  className="h-px w-full bg-gradient-to-r from-[var(--accent)]/40 via-border to-transparent"
-                />
-                <figure className="flex flex-col gap-3">
-                  <Quote
-                    size={20}
-                    strokeWidth={1.6}
-                    className="text-[var(--accent)]/70"
-                    aria-hidden
-                  />
-                  <blockquote
-                    className="text-foreground/90"
-                    style={{
-                      fontStyle: "italic",
-                      fontWeight: 500,
-                      letterSpacing: "-0.01em",
-                      lineHeight: 1.3,
-                      fontSize: "clamp(1.05rem, 1.4vw, 1.35rem)",
-                    }}
-                  >
-                    {activeEntry.slogan}
-                  </blockquote>
-                </figure>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="relative flex items-center justify-end">
-            <div role="tablist" aria-label="Chapter navigation" className="flex items-center gap-2">
-              {ENTRIES.map((entry, idx) => {
-                const isActive = idx === activeIndex;
-                return (
-                  <button
-                    key={entry.title}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-label={`Open chapter ${idx + 1}: ${entry.title}`}
-                    onClick={() => handleActiveIndexChange(idx)}
-                    className="group p-1"
-                  >
-                    <span
-                      className={`block h-1 rounded-full transition-all duration-300 ease-out ${
-                        isActive
-                          ? "w-10 bg-[var(--accent)]"
-                          : "w-2 bg-muted/40 group-hover:bg-muted"
-                      }`}
+                <figure className={index % 2 === 1 ? "lg:order-2" : ""}>
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-foreground/[0.05]">
+                    <Image
+                      src={story.image.src}
+                      alt={story.image.alt}
+                      fill
+                      sizes="(min-width: 1024px) 560px, 100vw"
+                      className="object-cover"
+                      style={{ objectPosition: story.image.position ?? "center" }}
                     />
-                  </button>
-                );
-              })}
-            </div>
+                  </div>
+                  <figcaption className="mt-3 text-sm text-muted">
+                    {story.caption}
+                  </figcaption>
+                </figure>
+
+                <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                  <p className="mb-4 text-sm font-medium text-accent">{story.theme}</p>
+                  <h3 className="max-w-xl text-[clamp(2.1rem,4vw,3.75rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-foreground">
+                    {story.title}
+                  </h3>
+                  <div className="mt-7 border-l-2 border-accent pl-4">
+                    <p className="font-medium text-foreground">{story.position}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted">{story.organization}</p>
+                  </div>
+                  <p className="mt-7 max-w-xl text-base leading-relaxed text-foreground/85 sm:text-lg">
+                    {story.description}
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
-        </aside>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 }
