@@ -1,6 +1,8 @@
 export type ProjectImage = {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
   fit?: "contain" | "cover";
 };
 
@@ -44,24 +46,34 @@ export const projects: Project[] = [
     image: {
       src: "/projects/autocare-cover.webp",
       alt: "AutoCare+ cover showing three mobile screens for vehicle details, the service dashboard, and booking",
+      width: 1800,
+      height: 1891,
       fit: "contain",
     },
     images: [
       {
         src: "/projects/autocare-booking-services.webp",
         alt: "AutoCare+ service booking screen with service options and a vehicle maintenance illustration",
+        width: 1800,
+        height: 1891,
       },
       {
         src: "/projects/autocare-booking-roadside.webp",
         alt: "AutoCare+ booking flow showing appointment times and roadside assistance options",
+        width: 1800,
+        height: 1891,
       },
       {
         src: "/projects/autocare-dashboard.webp",
         alt: "AutoCare+ home dashboard and vehicle details screens",
+        width: 1800,
+        height: 1891,
       },
       {
         src: "/projects/autocare-vehicle-overview.webp",
         alt: "AutoCare+ vehicle overview with odometer, specifications, and service booking",
+        width: 1800,
+        height: 1891,
       },
     ],
     imageBackground: "#801d1d",
@@ -82,24 +94,34 @@ export const projects: Project[] = [
     image: {
       src: "/projects/coa-z.jpeg",
       alt: "COA-Z website collage showing its homepage, organization directory, and updates",
+      width: 1280,
+      height: 1280,
       fit: "contain",
     },
     images: [
       {
         src: "/projects/coa-z-homepage.webp",
         alt: "COA-Z homepage introducing the council's work empowering student organizations",
+        width: 1800,
+        height: 939,
       },
       {
         src: "/projects/coa-z-organizations.webp",
         alt: "COA-Z organization directory with search, category filters, and student organization cards",
+        width: 1800,
+        height: 1015,
       },
       {
         src: "/projects/coa-z-cms-organizations.webp",
         alt: "COA-Z staff content workspace listing organization pages and publishing status",
+        width: 1800,
+        height: 1008,
       },
       {
         src: "/projects/coa-z-cms-events.webp",
         alt: "COA-Z staff content workspace listing event stories and publishing status",
+        width: 1800,
+        height: 1000,
       },
     ],
     imageBackground: "#8dc5e9",
@@ -120,6 +142,8 @@ export const projects: Project[] = [
     image: {
       src: "/projects/unyon-mindanao.jpg",
       alt: "Unyon Mindanao Year 5 brand graphic",
+      width: 2048,
+      height: 2048,
       fit: "contain",
     },
     imageBackground: "#eef0d9",
@@ -140,6 +164,8 @@ export const projects: Project[] = [
     image: {
       src: "/projects/magis.png",
       alt: "Magis AI Campus Guide interface",
+      width: 2880,
+      height: 1640,
     },
     imageBackground: "#c9d8e8",
   },
@@ -159,6 +185,8 @@ export const projects: Project[] = [
     image: {
       src: "/projects/uhms.png",
       alt: "AdZU Health Management System dashboard",
+      width: 4560,
+      height: 2565,
     },
     imageBackground: "#cfdfa9",
   },
