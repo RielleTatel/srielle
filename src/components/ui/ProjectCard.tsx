@@ -13,7 +13,7 @@ export function ProjectCard({
   reversed = false,
   onSelect,
 }: ProjectCardProps) {
-  const image = project.images?.[0] ?? project.image;
+  const image = project.image ?? project.images?.[0];
 
   return (
     <article className="group/project relative grid w-full overflow-hidden rounded-2xl border border-border bg-background/60 transition-colors duration-300 hover:border-accent/50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-accent motion-reduce:transition-none md:grid-cols-2">

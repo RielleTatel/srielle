@@ -2,7 +2,6 @@ export type ProjectImage = {
   src: string;
   alt: string;
   fit?: "contain" | "cover";
-  caption?: string;
 };
 
 export type Project = {
@@ -19,7 +18,7 @@ export type Project = {
   year?: string;
   /** Gallery images shown in the project dialog, in presentation order. */
   images?: ProjectImage[];
-  /** Single-image fallback for existing projects and cards. */
+  /** Project card cover image and fallback when no gallery images are set. */
   image?: ProjectImage;
   imageBackground: string;
   visualTitle?: string;
@@ -43,10 +42,28 @@ export const projects: Project[] = [
     services: ["NestJS", "Next.js", "Expo", "PostgreSQL"],
     industry: "Vehicle care",
     image: {
-      src: "/projects/autocare-plus-portrait.png",
-      alt: "AutoCare+ mobile screens for vehicle details, dashboard, and service booking",
-      fit: "cover",
+      src: "/projects/autocare-cover.webp",
+      alt: "AutoCare+ cover showing three mobile screens for vehicle details, the service dashboard, and booking",
+      fit: "contain",
     },
+    images: [
+      {
+        src: "/projects/autocare-booking-services.webp",
+        alt: "AutoCare+ service booking screen with service options and a vehicle maintenance illustration",
+      },
+      {
+        src: "/projects/autocare-booking-roadside.webp",
+        alt: "AutoCare+ booking flow showing appointment times and roadside assistance options",
+      },
+      {
+        src: "/projects/autocare-dashboard.webp",
+        alt: "AutoCare+ home dashboard and vehicle details screens",
+      },
+      {
+        src: "/projects/autocare-vehicle-overview.webp",
+        alt: "AutoCare+ vehicle overview with odometer, specifications, and service booking",
+      },
+    ],
     imageBackground: "#801d1d",
   },
   {
@@ -67,6 +84,24 @@ export const projects: Project[] = [
       alt: "COA-Z website collage showing its homepage, organization directory, and updates",
       fit: "contain",
     },
+    images: [
+      {
+        src: "/projects/coa-z-homepage.webp",
+        alt: "COA-Z homepage introducing the council's work empowering student organizations",
+      },
+      {
+        src: "/projects/coa-z-organizations.webp",
+        alt: "COA-Z organization directory with search, category filters, and student organization cards",
+      },
+      {
+        src: "/projects/coa-z-cms-organizations.webp",
+        alt: "COA-Z staff content workspace listing organization pages and publishing status",
+      },
+      {
+        src: "/projects/coa-z-cms-events.webp",
+        alt: "COA-Z staff content workspace listing event stories and publishing status",
+      },
+    ],
     imageBackground: "#8dc5e9",
   },
   {

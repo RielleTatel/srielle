@@ -31,55 +31,42 @@ function ProjectGallery({ project }: { project: Project }) {
   }
 
   return (
-    <div className="md:sticky md:top-0 md:self-start">
+    <div className="md:sticky md:top-0 md:flex md:h-full md:min-h-0 md:flex-col">
       {images.length > 0 ? (
         <>
           <div
             role="group"
             aria-label="Project photos"
-            className="grid grid-cols-2 gap-3 bg-background p-4 sm:gap-4 sm:p-5"
+            className="grid grid-cols-2 gap-0 overflow-hidden rounded-t-2xl md:min-h-0 md:flex-1 md:grid-rows-2 md:rounded-l-2xl md:rounded-tr-none"
             style={{ backgroundColor: project.imageBackground }}
           >
             {pageImages.map((image, index) => {
-              const leadImage =
-                pageImages.length === 1 || (pageImages.length === 3 && index === 0);
+              const leadImage = pageImages.length <= 2 || (pageImages.length === 3 && index === 0);
+              const singleImage = pageImages.length === 1;
 
               return (
                 <figure
                   key={`${image.src}-${page * IMAGES_PER_PAGE + index}`}
-                  className={`overflow-hidden rounded-xl ${leadImage ? "col-span-2" : ""}`}
+                  className={`relative aspect-[16/9] overflow-hidden md:aspect-auto ${leadImage ? "col-span-2" : ""} ${singleImage ? "md:row-span-2" : ""}`}
                 >
                   <a
                     href={image.src}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open full-size image in a new tab: ${image.alt}`}
-                    className="group/photo relative block overflow-hidden focus-visible:outline-3 focus-visible:outline-offset-[-3px] focus-visible:outline-accent"
-                    style={{ backgroundColor: project.imageBackground }}
+                    className="group/photo absolute inset-0 block overflow-hidden focus-visible:outline-3 focus-visible:outline-offset-[-3px] focus-visible:outline-accent"
                   >
-                    <div className={`relative ${leadImage ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        sizes="(min-width: 1120px) 270px, (min-width: 768px) 25vw, 50vw"
-                        className={`${
-                          image.fit === "cover"
-                            ? "object-cover"
-                            : "object-contain p-3 sm:p-5"
-                        } transition-transform duration-500 ease-out motion-reduce:transition-none group-hover/photo:scale-[1.04] group-focus-visible/photo:scale-[1.04]`}
-                      />
-                      <span className="absolute bottom-3 right-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-background/95 px-4 text-sm font-medium text-foreground shadow-sm transition-[opacity,transform] duration-200 motion-reduce:transition-none md:translate-y-1 md:opacity-0 md:group-hover/photo:translate-y-0 md:group-hover/photo:opacity-100 md:group-focus-visible/photo:translate-y-0 md:group-focus-visible/photo:opacity-100">
-                        Open image
-                        <ArrowUpRight aria-hidden="true" size={16} />
-                      </span>
-                    </div>
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      sizes="(min-width: 1120px) 270px, (min-width: 768px) 25vw, 50vw"
+                      className="object-cover transition-transform duration-500 ease-out motion-reduce:transition-none group-hover/photo:scale-[1.04] group-focus-visible/photo:scale-[1.04]"
+                    />
+                    <span className="absolute bottom-3 right-3 inline-flex size-10 translate-y-1 items-center justify-center rounded-full bg-background/90 text-foreground opacity-0 shadow-sm transition-[opacity,transform] duration-200 motion-reduce:transition-none group-hover/photo:translate-y-0 group-hover/photo:opacity-100 group-focus-visible/photo:translate-y-0 group-focus-visible/photo:opacity-100">
+                      <ArrowUpRight aria-hidden="true" size={18} />
+                    </span>
                   </a>
-                  {image.caption && (
-                    <figcaption className="bg-background/90 px-4 py-3 text-sm leading-relaxed text-muted">
-                      {image.caption}
-                    </figcaption>
-                  )}
                 </figure>
               );
             })}
