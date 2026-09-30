@@ -5,12 +5,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { FadeText } from "@/components/ui/FadeText";
 import { ProjectCard } from "@/components/ui/ProjectCard";
+import { ProjectModal } from "@/components/ui/ProjectModal";
 import { ScrollSlideIn } from "@/components/ui/ScrollSlideIn";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { projects } from "@/data/projects";
+import { projects, type Project } from "@/data/projects";
 
 export function Projects() {
   const [showAll, setShowAll] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const featuredCount = 3;
   const visibleProjects = showAll ? projects : projects.slice(0, featuredCount);
 
@@ -38,7 +40,11 @@ export function Projects() {
         {visibleProjects.map((project, index) => (
           <li key={project.slug}>
             <ScrollSlideIn from={index % 2 === 0 ? "left" : "right"}>
-              <ProjectCard project={project} reversed={index % 2 === 1} />
+              <ProjectCard
+                project={project}
+                reversed={index % 2 === 1}
+                onSelect={() => setSelectedProject(project)}
+              />
             </ScrollSlideIn>
           </li>
         ))}
@@ -55,6 +61,11 @@ export function Projects() {
           {showAll ? "Show fewer projects" : `Show ${projects.length - featuredCount} more projects`}
         </button>
       </div>
+
+      <ProjectModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </section>
   );
 }

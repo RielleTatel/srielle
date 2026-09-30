@@ -196,6 +196,27 @@ footer {
   50%, 100% { opacity: 0; }
 }
 
+@keyframes project-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.project-modal[open] {
+  animation: project-dialog-enter 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-modal[open] {
+    animation: none;
+  }
+}
+
 .typewriter-cursor {
   display: inline-block;
   margin-left: 1px;

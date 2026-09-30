@@ -1,3 +1,10 @@
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  fit?: "contain" | "cover";
+  caption?: string;
+};
+
 export type Project = {
   slug: string;
   title: string;
@@ -10,7 +17,10 @@ export type Project = {
   services: string[];
   industry: string;
   year?: string;
-  image?: { src: string; alt: string; fit?: "contain" | "cover" };
+  /** Gallery images shown in the project dialog, in presentation order. */
+  images?: ProjectImage[];
+  /** Single-image fallback for existing projects and cards. */
+  image?: ProjectImage;
   imageBackground: string;
   visualTitle?: string;
   visualLabel?: string;
@@ -80,27 +90,8 @@ export const projects: Project[] = [
     imageBackground: "#eef0d9",
   },
   {
-    slug: "ateneo-health-management-system",
-    title: "Ateneo Health Management System",
-    tagline: "Making campus healthcare easier to navigate for students and staff.",
-    description:
-      "Bringing medical records, consultations, and health monitoring into one system gives campus health staff a clearer view of each student's care. It reduces time spent piecing together records and helps the clinic respond with the right context.",
-    impact: {
-      result:
-        "Helps clinic staff respond with the student's care history in view.",
-    },
-    services: ["Django", "PostgreSQL", "Python", "REST API"],
-    industry: "Healthcare",
-    year: "2025",
-    image: {
-      src: "/projects/uhms.png",
-      alt: "Ateneo Health Management System dashboard",
-    },
-    imageBackground: "#cfdfa9",
-  },
-  {
     slug: "magis-directory",
-    title: "Magis Directory",
+    title: "Magis AI Campus Guide",
     tagline: "Helping students find their place in campus life.",
     description:
       "Students can discover organizations by name or interest instead of searching through scattered updates. A searchable directory and source-citing handbook assistant make campus information easier to find, helping students choose where to get involved with more confidence.",
@@ -113,27 +104,27 @@ export const projects: Project[] = [
     year: "2025",
     image: {
       src: "/projects/magis.png",
-      alt: "Magis Directory interface",
+      alt: "Magis AI Campus Guide interface",
     },
     imageBackground: "#c9d8e8",
   },
   {
-    slug: "mao-recruitment-registration",
-    title: "MAO Recruitment Registration",
-    tagline: "Giving applicants and reviewers a clearer recruitment process.",
+    slug: "ateneo-health-management-system",
+    title: "AdZU Health Management System",
+    tagline: "Making campus healthcare easier to navigate for students and staff.",
     description:
-      "A guided application gives students one clear path through MAO recruitment. Administrators can review submissions and export results from the same place, making a detail-heavy selection process easier to manage.",
+      "Bringing medical records, consultations, and health monitoring into one system gives campus health staff a clearer view of each student's care. It reduces time spent piecing together records and helps the clinic respond with the right context.",
     impact: {
       result:
-        "Brings applications, review, and exports into one workflow for the recruitment team.",
+        "Helps clinic staff respond with the student's care history in view.",
     },
-    services: ["React", "TypeScript", "Firebase", "Firestore"],
-    industry: "Student recruitment",
+    services: ["Django", "PostgreSQL", "Python", "REST API"],
+    industry: "Healthcare",
+    year: "2025",
     image: {
-      src: "/projects/mao-recruitment.png",
-      alt: "MAO recruitment admin page showing applications and department exports without applicant details",
-      fit: "contain",
+      src: "/projects/uhms.png",
+      alt: "AdZU Health Management System dashboard",
     },
-    imageBackground: "#f5efe3",
+    imageBackground: "#cfdfa9",
   },
 ];
