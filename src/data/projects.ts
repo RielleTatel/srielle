@@ -44,7 +44,7 @@ export const projects: Project[] = [
     services: ["NestJS", "Next.js", "Expo", "PostgreSQL"],
     industry: "Vehicle care",
     image: {
-      src: "/projects/autocare-cover.webp",
+      src: "/projects/autocare-cover-v2.webp",
       alt: "A hand holding a phone with the AutoCare+ vehicle care dashboard",
       width: 1800,
       height: 1890,
@@ -52,19 +52,19 @@ export const projects: Project[] = [
     },
     images: [
       {
-        src: "/projects/autocare-dashboard.webp",
+        src: "/projects/autocare-dashboard-v2.webp",
         alt: "AutoCare+ vehicle overview and appointment screens shown on two phones",
         width: 1800,
         height: 1890,
       },
       {
-        src: "/projects/autocare-booking-roadside.webp",
+        src: "/projects/autocare-booking-roadside-v2.webp",
         alt: "AutoCare+ roadside assistance request with issue selection and map location",
         width: 1800,
         height: 1890,
       },
       {
-        src: "/projects/autocare-booking-services.webp",
+        src: "/projects/autocare-booking-services-v2.webp",
         alt: "A hand holding the AutoCare+ screen for choosing a vehicle service",
         width: 1800,
         height: 1890,
@@ -94,25 +94,25 @@ export const projects: Project[] = [
     },
     images: [
       {
-        src: "/projects/coa-z-homepage.webp",
+        src: "/projects/coa-z-homepage-v2.webp",
         alt: "COA-Z homepage displayed on a laptop",
         width: 1800,
         height: 1890,
       },
       {
-        src: "/projects/coa-z-organizations.webp",
+        src: "/projects/coa-z-organizations-v2.webp",
         alt: "COA-Z organization directory displayed on a laptop",
         width: 1800,
         height: 1890,
       },
       {
-        src: "/projects/coa-z-cms-events.webp",
+        src: "/projects/coa-z-cms-events-v2.webp",
         alt: "COA-Z event stories content workspace displayed on a laptop",
         width: 1800,
         height: 1890,
       },
       {
-        src: "/projects/coa-z-cms-organizations.webp",
+        src: "/projects/coa-z-cms-organizations-v2.webp",
         alt: "COA-Z organizations content workspace displayed on a laptop",
         width: 1800,
         height: 1890,
