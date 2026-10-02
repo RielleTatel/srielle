@@ -96,7 +96,9 @@ function ProjectGallery({ project }: { project: Project }) {
                   alt={image.alt}
                   fill
                   sizes="(min-width: 1152px) 645px, (min-width: 768px) 58vw, calc(100vw - 2rem)"
-                  className="object-cover transition-transform duration-500 ease-out motion-reduce:transition-none group-hover/photo:scale-[1.015] group-focus-visible/photo:scale-[1.015]"
+                  className={`${
+                    image.fit === "contain" ? "object-contain" : "object-cover"
+                  } transition-transform duration-500 ease-out motion-reduce:transition-none group-hover/photo:scale-[1.015] group-focus-visible/photo:scale-[1.015]`}
                 />
                 <span className="absolute bottom-4 right-4 inline-flex size-10 translate-y-1 items-center justify-center rounded-full bg-background/90 text-foreground opacity-0 shadow-sm transition-[opacity,transform] duration-200 motion-reduce:transition-none group-hover/photo:translate-y-0 group-hover/photo:opacity-100 group-focus-visible/photo:translate-y-0 group-focus-visible/photo:opacity-100">
                   <ArrowUpRight aria-hidden="true" size={18} />
