@@ -1,155 +1,245 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 
-type AboutStory = {
-  theme: string;
-  title: string;
-  position: string;
-  organization: string;
-  description: string;
-  image: { src: string; alt: string; position?: string };
-  caption: string;
-};
+const experience = [
+  {
+    year: "2026",
+    title: "System Developer",
+    organization: "CITS, Ateneo de Zamboanga University",
+    period: "July 2026 - Present",
+    description:
+      "Selected for the CITS ALP program to develop production software for AdZU. I'm building a thesis inventory system that centralizes 500+ records, with approval workflows and faculty teaching load scheduling.",
+  },
+  {
+    year: "2026",
+    title: "Founder & Full-Stack Developer",
+    organization: "Debately",
+    period: "April 2026",
+    description:
+      "I built a free-to-use debate tournament platform for registration, participant management, finance tracking, and event operations. It supports 80+ teams and 240+ participants, with a configurable three-phase registration sync system.",
+  },
+  {
+    year: "2024-25",
+    title: "President",
+    organization: "GDG on Campus Blue Eagle",
+    period: "Academic year 2024-2025",
+    description:
+      "I led a 60+ member developer community and coordinated 30 officers. Alongside BlueCode, I organized hackathon preparation, AI workshops, and digital literacy initiatives including Ready, Set, Hack!, AIEnhance, and ClickStart.",
+  },
+  {
+    year: "2024-25",
+    title: "Internal Vice-President",
+    organization: "Ateneo Informatics Computing Guild",
+    period: "Academic year 2024-2025",
+    description:
+      "I managed internal operations for an academic organization serving 300+ students in computing and new media programs, improving coordination, governance, and internal communications.",
+  },
+];
 
-const stories: AboutStory[] = [
-  {
-    theme: "Community leadership",
-    title: "Building developer communities",
-    position: "President",
-    organization: "Google Developer Groups on Campus, Ateneo de Zamboanga University (2024–2025)",
-    description:
-      "I led a 60+ member technology community through hackathons, AI workshops, and developer programs. I also spearheaded BlueCode: Zamboanga Hackathon 2025, the first citywide hackathon in Zamboanga after the pandemic, helping revive the local tech community.",
-    image: {
-      src: "/aboutSection/blueCode.jpg",
-      alt: "Participants and organizers at BlueCode: Zamboanga Hackathon 2025",
-    },
-    caption: "BlueCode: Zamboanga Hackathon 2025",
-  },
-  {
-    theme: "Entrepreneurship",
-    title: "Starting Anyam",
-    position: "Lead Founder",
-    organization: "Anyam (2025–Present)",
-    description:
-      "I founded Anyam to help underrepresented destinations tell their stories through technology. The team won the regional championship and later became a national winning team in the CHED Tourism Startup Challenge, securing ₱250,000 in implementation funding.",
-    image: {
-      src: "/awards/awards2.jpg",
-      alt: "The Anyam team receiving recognition at the Tourism Startup Challenge",
-    },
-    caption: "Anyam at the Tourism Startup Challenge",
-  },
-  {
-    theme: "Debate and advocacy",
-    title: "Making a case for ideas",
-    position: "Competitive Debater",
-    organization: "Ateneo Debate Union",
-    description:
-      "I represented Ateneo de Zamboanga University in regional and national British Parliamentary debate tournaments. Debate sharpened how I analyze a problem, listen under pressure, and make a clear case. I was recognized as a National Breaking Debater at the 36th National Debate Championship.",
-    image: {
-      src: "/debate/debate2.jpeg",
-      alt: "Gabrielle speaking at a debate event",
-      position: "center 40%",
-    },
-    caption: "Speaking with the Ateneo Debate Union",
-  },
-  {
-    theme: "Technology education",
-    title: "Sharing what I learn",
-    position: "Technical Speaker and Community Volunteer",
-    organization: "GDG on Campus, GDG Zamboanga, and community events",
-    description:
-      "I speak at community technology events, including Build with AI and BuildLabs, to share practical ideas about AI and software development. These sessions are a way to make technical topics more approachable and help more people start building.",
-    image: {
-      src: "/speaker/speaker2.jpeg",
-      alt: "Gabrielle speaking during a Build with AI community event",
-      position: "center 42%",
-    },
-    caption: "Build with AI in Zamboanga",
-  },
+const affiliations = [
+  { name: "GDG on Campus Blue Eagle", role: "Member, former President" },
+  { name: "Ateneo Informatics Computing Guild", role: "Member, former Internal Vice-President" },
+  { name: "Ateneo Debate Union", role: "Member" },
+  { name: "Rotaract Club of Zamboanga City West", role: "Member" },
+  { name: "El Consejo Atenista Judicial Council", role: "Senior Associate Justice" },
 ];
 
 export function About() {
   return (
     <>
-      <section className="mx-auto grid max-w-7xl gap-10 px-6 pb-20 pt-10 sm:px-10 sm:pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-stretch lg:gap-16 lg:px-15 lg:pb-28 lg:pt-20">
-        <div className="flex flex-col justify-between py-2 lg:py-8">
-          <div>
-            <p className="mb-8 text-sm font-medium text-accent">Gabrielle Tatel · Zamboanga City</p>
-            <h1 className="max-w-2xl text-[clamp(4rem,8.5vw,8.5rem)] font-bold leading-[0.88] tracking-[-0.07em] text-foreground">
-              About me<span className="text-accent">.</span>
-            </h1>
-          </div>
-          <div className="mt-14 max-w-xl border-t border-border pt-7 lg:mt-10">
-            <p className="text-[clamp(1.5rem,2.6vw,2.25rem)] font-medium leading-tight tracking-[-0.035em] text-foreground">
-              I build products and the communities around them.
-            </p>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg">
-              I&apos;m a full-stack developer whose work also moves through student leadership, entrepreneurship, debate, and technology education. Each part shapes how I solve problems and work with people.
-            </p>
-          </div>
-        </div>
-
-        <figure className="relative min-h-[420px] overflow-hidden rounded-[2rem] bg-[#181714] sm:min-h-[560px] lg:min-h-[680px]">
+      <section id="about-intro" className="about-intro" aria-labelledby="about-name">
+        <figure className="about-portrait">
           <Image
-            src="/contact/portrait.png"
+            src="/aboutSection/portrait-monochrome.webp"
             alt="Portrait of Gabrielle Tatel"
             fill
-            priority
-            sizes="(min-width: 1024px) 520px, (min-width: 640px) 80vw, 100vw"
-            className="object-cover object-[center_30%]"
+            loading="eager"
+            fetchPriority="high"
+            sizes="(min-width: 1280px) 316px, (min-width: 768px) 301px, 218px"
+            className="object-contain object-bottom"
           />
         </figure>
-      </section>
-
-      <section id="about-stories" className="border-t border-border bg-background/80">
-        <div className="mx-auto max-w-7xl px-6 pb-20 pt-16 sm:px-10 lg:px-15 lg:pb-28 lg:pt-24">
-          <header className="mb-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.6fr)] lg:items-end lg:gap-12">
-            <h2 className="max-w-2xl text-[clamp(2.75rem,5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-foreground">
-              Beyond the code.
-            </h2>
-            <p className="max-w-md text-base leading-relaxed text-muted sm:text-lg">
-              The experiences that shape how I lead, think, and share what I know.
-            </p>
-          </header>
-
-          <div>
-            {stories.map((story, index) => (
-              <article
-                key={story.theme}
-                className="grid gap-8 border-t border-border py-12 sm:py-16 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-center lg:gap-16 lg:py-20"
-              >
-                <figure className={index % 2 === 1 ? "lg:order-2" : ""}>
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-foreground/[0.05]">
-                    <Image
-                      src={story.image.src}
-                      alt={story.image.alt}
-                      fill
-                      sizes="(min-width: 1024px) 560px, 100vw"
-                      className="object-cover"
-                      style={{ objectPosition: story.image.position ?? "center" }}
-                    />
-                  </div>
-                  <figcaption className="mt-3 text-sm text-muted">
-                    {story.caption}
-                  </figcaption>
-                </figure>
-
-                <div className={index % 2 === 1 ? "lg:order-1" : ""}>
-                  <p className="mb-4 text-sm font-medium text-accent">{story.theme}</p>
-                  <h3 className="max-w-xl text-[clamp(2.1rem,4vw,3.75rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-foreground">
-                    {story.title}
-                  </h3>
-                  <div className="mt-7 border-l-2 border-accent pl-4">
-                    <p className="font-medium text-foreground">{story.position}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted">{story.organization}</p>
-                  </div>
-                  <p className="mt-7 max-w-xl text-base leading-relaxed text-foreground/85 sm:text-lg">
-                    {story.description}
-                  </p>
-                </div>
-              </article>
-            ))}
+        <div className="about-intro-copy">
+          <h1 id="about-name">Gabrielle Tatel</h1>
+          <p>I&apos;m a full-stack developer building products and the communities around them.</p>
+          <div className="about-intro-links">
+            <Link href="/#projects" className="about-link">
+              View projects <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden />
+            </Link>
+            <Link href="/#contact" className="about-link">
+              Get in touch <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden />
+            </Link>
           </div>
         </div>
+      </section>
+
+      <dl className="about-highlights" aria-label="Community and startup highlights">
+        <div><dt>Community members</dt><dd>60+</dd></div>
+        <div><dt>Hackathon participants</dt><dd>100+</dd></div>
+        <div><dt>Startup funding</dt><dd>₱250k</dd></div>
+      </dl>
+
+      <section id="about-stories" className="about-section" aria-labelledby="about-stories-title">
+        <header className="about-section-heading">
+          <h2 id="about-stories-title">Beyond the code.</h2>
+        </header>
+        <p className="about-overview">
+          My work also moves through student leadership, entrepreneurship, debate, and technology education. Each part shapes how I solve problems and work with people.
+        </p>
+        <div id="community" className="about-story-grid">
+          <article>
+            <figure>
+              <div className="about-story-image">
+                <Image
+                  src="/aboutSection/blueCode.jpg"
+                  alt="Participants and organizers at BlueCode: Zamboanga Hackathon 2025"
+                  fill
+                  sizes="(min-width: 1280px) 480px, (min-width: 768px) 42vw, calc(100vw - 48px)"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption>BlueCode: Zamboanga Hackathon 2025</figcaption>
+            </figure>
+            <h3>Building developer communities</h3>
+            <p className="about-role">President, GDG on Campus Blue Eagle</p>
+            <p className="about-period">2024-2025</p>
+            <p className="about-story-body">
+              I led a 60+ member technology community through hackathons, AI workshops, and developer programs. I also spearheaded BlueCode: Zamboanga Hackathon 2025, bringing together 100+ participants and helping revive the local tech community after the pandemic.
+            </p>
+          </article>
+          <article id="entrepreneurship">
+            <figure>
+              <div className="about-story-image">
+                <Image
+                  src="/awards/awards2.jpg"
+                  alt="The Anyam team receiving recognition at the Tourism Startup Challenge"
+                  fill
+                  sizes="(min-width: 1280px) 420px, (min-width: 768px) 37vw, calc(100vw - 48px)"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption>Anyam at the Tourism Startup Challenge</figcaption>
+            </figure>
+            <h3>Starting Anyam</h3>
+            <p className="about-role">Lead Founder & Product Lead</p>
+            <p className="about-period">May 2026 - Present</p>
+            <p className="about-story-body">
+              I founded Anyam to help underrepresented destinations tell their stories through technology. The team won the regional championship and became a national finalist in the CHED Tourism Startup Challenge, securing ₱250,000 in implementation funding.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="experience" className="about-section" aria-labelledby="about-experience-title">
+        <header className="about-section-heading">
+          <h2 id="about-experience-title">Experience</h2>
+        </header>
+        <div className="about-experience-list">
+          {experience.map((role) => (
+            <details key={role.title} className="about-experience-row">
+              <summary>
+                <span className="about-experience-year">{role.year}</span>
+                <h3>{role.title}</h3>
+                <span className="about-experience-org">{role.organization}</span>
+                <ChevronDown size={16} strokeWidth={1.5} className="about-disclosure-icon" aria-hidden />
+              </summary>
+              <div className="about-experience-detail">
+                <p className="about-period">{role.period}</p>
+                <p>{role.description}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section id="speaking" className="about-section" aria-labelledby="about-speaking-title">
+        <header className="about-section-heading">
+          <h2 id="about-speaking-title">Speaking & sharing</h2>
+        </header>
+        <figure>
+          <div className="about-speaking-image">
+            <Image
+              src="/speaker/speaker2.jpeg"
+              alt="Gabrielle speaking during a Build with AI community event"
+              fill
+              sizes="(min-width: 1036px) 940px, (min-width: 1024px) calc(100vw - 96px), (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
+              className="object-cover object-[center_42%]"
+            />
+          </div>
+          <figcaption>Build with AI in Zamboanga</figcaption>
+        </figure>
+        <div className="about-speaking-copy">
+          <h3>Sharing what I learn</h3>
+          <p className="about-role">Technical Speaker and Community Volunteer</p>
+          <p className="about-story-body">
+            I speak at community technology events, including Build with AI and BuildLabs, to share practical ideas about AI and software development. These sessions make technical topics more approachable and help more people start building.
+          </p>
+        </div>
+        <div className="about-talks">
+          <article>
+            <h4>BuildLabs: Snap-in</h4>
+            <p>Frontend modular design and component breakdown.</p>
+            <time dateTime="2026-04-11">11 April 2026</time>
+          </article>
+          <article>
+            <h4>BuildLabs: Stack-Up</h4>
+            <p>Full-stack integration, APIs, and database connections.</p>
+            <time dateTime="2026-04-14">14-15 April 2026</time>
+          </article>
+        </div>
+      </section>
+
+      <section id="recognition" className="about-section" aria-labelledby="about-recognition-title">
+        <header className="about-section-heading">
+          <h2 id="about-recognition-title">Recognition</h2>
+        </header>
+        <div className="about-recognition-grid">
+          <article>
+            <span className="about-award-result">Regional winner / National finalist</span>
+            <h3>CHED Tourism Startup Challenge</h3>
+            <p>₱250,000 in implementation funding for Anyam.</p>
+            <time dateTime="2026-05">May 2026</time>
+          </article>
+          <article>
+            <span className="about-award-result">2nd place</span>
+            <h3>Build with AI Hackathon</h3>
+            <p>An AI application for fast fashion sustainability.</p>
+            <time dateTime="2026-05">May 2026</time>
+          </article>
+        </div>
+        <article className="about-debate">
+          <figure className="about-debate-image">
+            <Image
+              src="/debate/debate2.jpeg"
+              alt="Gabrielle speaking at a debate event"
+              fill
+              sizes="(min-width: 768px) 180px, 130px"
+              className="object-cover object-[center_40%]"
+            />
+          </figure>
+          <div>
+            <h3>Making a case for ideas</h3>
+            <p className="about-role">Competitive Debater, Ateneo Debate Union</p>
+            <p className="about-story-body">
+              I represented Ateneo de Zamboanga University in regional and national British Parliamentary debate tournaments. Debate sharpened how I analyze a problem, listen under pressure, and make a clear case. At the 24th National Debate Championship, my team reached Open Pre-octofinals and broke 36th overall.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section id="affiliations" className="about-section" aria-labelledby="about-affiliations-title">
+        <header className="about-section-heading">
+          <h2 id="about-affiliations-title">Affiliations</h2>
+        </header>
+        <dl className="about-affiliations">
+          {affiliations.map((affiliation) => (
+            <div key={affiliation.name}>
+              <dt>{affiliation.name}</dt>
+              <dd>{affiliation.role}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
     </>
   );

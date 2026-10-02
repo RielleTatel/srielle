@@ -28,7 +28,6 @@ export type Project = {
   url?: string;
 };
 
-// The first three projects are the featured work shown before the landing-page toggle.
 export const projects: Project[] = [
   {
     slug: "autocare-plus",
@@ -141,47 +140,5 @@ export const projects: Project[] = [
       fit: "contain",
     },
     imageBackground: "#eef0d9",
-  },
-  {
-    slug: "magis-directory",
-    title: "Magis AI Campus Guide",
-    tagline: "Helping students find their place in campus life.",
-    description:
-      "Students can discover organizations by name or interest instead of searching through scattered updates. A searchable directory and source-citing handbook assistant make campus information easier to find, helping students choose where to get involved with more confidence.",
-    impact: {
-      result:
-        "Puts organization discovery and source-backed campus answers within easier reach.",
-    },
-    services: ["Next.js", "React", "TypeScript", "AI Integration", "PostgreSQL"],
-    industry: "Education",
-    year: "2025",
-    image: {
-      src: "/projects/magis.png",
-      alt: "Magis AI Campus Guide interface",
-      width: 2880,
-      height: 1640,
-    },
-    imageBackground: "#c9d8e8",
-  },
-  {
-    slug: "ateneo-health-management-system",
-    title: "AdZU Health Management System",
-    tagline: "Making campus healthcare easier to navigate for students and staff.",
-    description:
-      "Bringing medical records, consultations, and health monitoring into one system gives campus health staff a clearer view of each student's care. It reduces time spent piecing together records and helps the clinic respond with the right context.",
-    impact: {
-      result:
-        "Helps clinic staff respond with the student's care history in view.",
-    },
-    services: ["Django", "PostgreSQL", "Python", "REST API"],
-    industry: "Healthcare",
-    year: "2025",
-    image: {
-      src: "/projects/uhms.png",
-      alt: "AdZU Health Management System dashboard",
-      width: 4560,
-      height: 2565,
-    },
-    imageBackground: "#cfdfa9",
   },
 ];

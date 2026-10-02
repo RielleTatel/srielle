@@ -23,8 +23,11 @@ export function useSmoothScrollReady() {
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
+  const useNativeScroll = pathname === "/about";
 
   useEffect(() => {
+    if (useNativeScroll) return;
+
     const smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
@@ -38,10 +41,10 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       window.cancelAnimationFrame(readyFrame);
       smoother.kill();
     };
-  }, []);
+  }, [useNativeScroll]);
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || useNativeScroll) return;
 
     let frame = 0;
     const syncScroll = () => {
@@ -70,7 +73,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("hashchange", syncScroll);
     };
-  }, [isReady, pathname]);
+  }, [isReady, pathname, useNativeScroll]);
 
   return (
     <SmoothScrollReadyContext.Provider value={isReady}>
