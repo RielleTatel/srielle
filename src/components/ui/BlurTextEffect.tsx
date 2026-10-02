@@ -45,10 +45,10 @@ export function BlurTextEffect({
         return (
           <span
             key={i}
+            className="blur-text-char"
             style={{
               display: "inline-block",
               filter: blur > 0 ? `blur(${blur}px)` : undefined,
-              willChange: blur > 0 ? "filter" : undefined,
             }}
           >
             {char === " " ? " " : char}

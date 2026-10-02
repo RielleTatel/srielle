@@ -2,7 +2,8 @@
 
 import { useSyncExternalStore } from "react";
 
-const query = "(prefers-reduced-motion: reduce)";
+const query =
+  "(prefers-reduced-motion: reduce), (max-width: 767px), (pointer: coarse)";
 
 function subscribe(onChange: () => void) {
   const media = window.matchMedia(query);
@@ -18,6 +19,6 @@ function getServerSnapshot() {
   return false;
 }
 
-export function usePrefersReducedMotion() {
+export function useShouldSkipMotion() {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

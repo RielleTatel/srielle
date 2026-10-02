@@ -4,15 +4,20 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
 import { usePathname } from "next/navigation";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
+import {
+  loadGsap,
+  loadScrollSmoother,
+  loadScrollTrigger,
+} from "@/lib/gsap";
+import { scrollToAnchor } from "@/lib/scroll";
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+type ScrollSmootherPlugin = Awaited<ReturnType<typeof loadScrollSmoother>>;
+type ScrollTriggerPlugin = Awaited<ReturnType<typeof loadScrollTrigger>>;
 
 const SmoothScrollReadyContext = createContext(false);
 
@@ -24,45 +29,80 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false);
   const pathname = usePathname();
   const useNativeScroll = pathname === "/about";
+  const smootherPlugin = useRef<ScrollSmootherPlugin | null>(null);
+  const scrollTriggerPlugin = useRef<ScrollTriggerPlugin | null>(null);
 
   useEffect(() => {
-    if (useNativeScroll) return;
+    const touchOrSmallScreen = window.matchMedia(
+      "(max-width: 767px), (pointer: coarse)",
+    );
+    let readyFrame = 0;
+    let disposed = false;
 
-    const smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 0.6,
-      smoothTouch: 0.1,
-    });
+    const configureScroll = async () => {
+      window.cancelAnimationFrame(readyFrame);
+      smootherPlugin.current?.get()?.kill();
 
-    const readyFrame = window.requestAnimationFrame(() => setIsReady(true));
+      if (useNativeScroll || touchOrSmallScreen.matches) {
+        setIsReady(true);
+        return;
+      }
+
+      setIsReady(false);
+      const [gsap, ScrollTrigger, ScrollSmoother] = await Promise.all([
+        loadGsap(),
+        loadScrollTrigger(),
+        loadScrollSmoother(),
+      ]);
+      if (disposed || useNativeScroll || touchOrSmallScreen.matches) return;
+
+      gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+      smootherPlugin.current = ScrollSmoother;
+      scrollTriggerPlugin.current = ScrollTrigger;
+      ScrollSmoother.create({
+        wrapper: "#smooth-wrapper",
+        content: "#smooth-content",
+        smooth: 0.6,
+        smoothTouch: 0.1,
+      });
+      readyFrame = window.requestAnimationFrame(() => setIsReady(true));
+    };
+
+    const handleScrollModeChange = () => void configureScroll();
+    void configureScroll();
+    touchOrSmallScreen.addEventListener("change", handleScrollModeChange);
 
     return () => {
+      disposed = true;
+      touchOrSmallScreen.removeEventListener("change", handleScrollModeChange);
       window.cancelAnimationFrame(readyFrame);
-      smoother.kill();
+      smootherPlugin.current?.get()?.kill();
     };
   }, [useNativeScroll]);
 
   useEffect(() => {
-    if (!isReady || useNativeScroll) return;
+    if (!isReady) return;
 
     let frame = 0;
     const syncScroll = () => {
       window.cancelAnimationFrame(frame);
       frame = window.requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-        const smoother = ScrollSmoother.get();
-        if (!smoother) return;
-
+        scrollTriggerPlugin.current?.refresh();
+        const smoother = smootherPlugin.current?.get();
         const hash = decodeURIComponent(window.location.hash.slice(1));
         const target = hash ? document.getElementById(hash) : null;
         if (target) {
-          smoother.scrollTo(
-            Math.max(0, smoother.offset(target, "top top") - 64),
-            false,
-          );
+          if (smoother) {
+            smoother.scrollTo(
+              Math.max(0, smoother.offset(target, "top top") - 64),
+              false,
+            );
+          } else {
+            scrollToAnchor(target);
+          }
         } else if (!hash) {
-          smoother.scrollTo(0, false);
+          if (smoother) smoother.scrollTo(0, false);
+          else window.scrollTo(0, 0);
         }
       });
     };
@@ -73,7 +113,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("hashchange", syncScroll);
     };
-  }, [isReady, pathname, useNativeScroll]);
+  }, [isReady, pathname]);
 
   return (
     <SmoothScrollReadyContext.Provider value={isReady}>

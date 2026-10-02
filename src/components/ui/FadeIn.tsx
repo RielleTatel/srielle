@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
-import { usePrefersReducedMotion } from "@/components/ui/usePrefersReducedMotion";
+import { useShouldSkipMotion } from "@/components/ui/useShouldSkipMotion";
 
 type FadeInProps = {
   children: ReactNode;
@@ -20,7 +20,7 @@ export function FadeIn({
   immediate = false,
   y = 20,
 }: FadeInProps) {
-  const reduce = usePrefersReducedMotion();
+  const reduce = useShouldSkipMotion();
   const initial = reduce ? { opacity: 1 } : { opacity: 0, y };
   const target = { opacity: 1, y: 0 };
   const transition = {
@@ -28,11 +28,18 @@ export function FadeIn({
     delay,
     ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
   };
+  const motionClassName = className
+    ? `fade-in-motion ${className}`
+    : "fade-in-motion";
+
+  if (reduce) {
+    return <div className={className}>{children}</div>;
+  }
 
   if (immediate) {
     return (
       <motion.div
-        className={className}
+        className={motionClassName}
         initial={initial}
         animate={target}
         transition={transition}
@@ -44,7 +51,7 @@ export function FadeIn({
 
   return (
     <motion.div
-      className={className}
+      className={motionClassName}
       initial={initial}
       whileInView={target}
       viewport={{ once: true, amount: 0.2 }}

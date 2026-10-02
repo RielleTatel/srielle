@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useShouldSkipMotion } from "@/components/ui/useShouldSkipMotion";
 
 type AnimationStyle =
   | "3dRoll"
@@ -67,13 +68,19 @@ export function KineticTextSwapper({
   className,
 }: KineticTextSwapperProps) {
   const [index, setIndex] = useState(0);
+  const reduce = useShouldSkipMotion();
 
   useEffect(() => {
+    if (reduce) return;
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % words.length);
     }, interval * 1000);
     return () => clearInterval(id);
-  }, [words.length, interval]);
+  }, [reduce, words.length, interval]);
+
+  if (reduce) {
+    return <span className={className}>{words[0]}</span>;
+  }
 
   // Invisible longest-word spacer keeps inline width stable across swaps —
   // without this, surrounding text reflows as the active word changes.
@@ -109,7 +116,7 @@ export function KineticTextSwapper({
             damping: 16,
             mass: 0.8,
           }}
-          className={className}
+          className={className ? `kinetic-word ${className}` : "kinetic-word"}
           style={{
             position: "absolute",
             left: 0,

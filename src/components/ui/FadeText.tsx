@@ -2,7 +2,7 @@
 
 import { Fragment, type CSSProperties } from "react";
 import { motion, type Variants } from "motion/react";
-import { usePrefersReducedMotion } from "@/components/ui/usePrefersReducedMotion";
+import { useShouldSkipMotion } from "@/components/ui/useShouldSkipMotion";
 
 type FadeTextProps = {
   children: string;
@@ -23,7 +23,7 @@ export function FadeText({
   style,
   viewportAmount = 0.4,
 }: FadeTextProps) {
-  const reduce = usePrefersReducedMotion();
+  const reduce = useShouldSkipMotion();
   const words = children.split(/(\s+)/).filter((part) => part.length > 0);
 
   if (reduce) {
@@ -64,7 +64,7 @@ export function FadeText({
 
   return (
     <motion.span
-      className={className}
+      className={className ? `fade-text-motion ${className}` : "fade-text-motion"}
       style={style}
       variants={container}
       initial="hidden"

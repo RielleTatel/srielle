@@ -1,12 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeText } from "@/components/ui/FadeText";
 import { useSmoothScrollReady } from "@/components/ui/SmoothScroll";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsap, loadScrollTrigger } from "@/lib/gsap";
 
 type Pill = {
   x: string;
@@ -50,23 +47,77 @@ export function ParallaxPills() {
     if (!isSmoothScrollReady || !section) return;
 
     const html = document.documentElement;
-    const enableDarkMode = () => html.classList.add("dark-mode");
-    const disableDarkMode = () => html.classList.remove("dark-mode");
+    const motionQuery = window.matchMedia(
+      "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+    );
+    let disposed = false;
+    let generation = 0;
+    let frame = 0;
+    let isDarkMode = false;
+    let killDesktopMotion: (() => void) | undefined;
+    const enableDarkMode = () => {
+      isDarkMode = true;
+      html.classList.add("dark-mode");
+    };
+    const disableDarkMode = () => {
+      isDarkMode = false;
+      html.classList.remove("dark-mode");
+    };
 
-    const themeTrigger = ScrollTrigger.create({
-      trigger: section,
-      start: "top center",
-      onEnter: enableDarkMode,
-      onLeaveBack: disableDarkMode,
-      onRefresh(self) {
-        if (self.scroll() >= self.start) enableDarkMode();
-        else disableDarkMode();
-      },
-    });
+    const updateNativeTheme = () => {
+      frame = 0;
+      const shouldBeDark =
+        section.getBoundingClientRect().top <= window.innerHeight / 2;
+      if (shouldBeDark === isDarkMode) return;
+      isDarkMode = shouldBeDark;
+      html.classList.toggle("dark-mode", shouldBeDark);
+    };
 
-    const mm = gsap.matchMedia();
+    const scheduleNativeThemeUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateNativeTheme);
+    };
 
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const attachNativeTheme = () => {
+      updateNativeTheme();
+      window.addEventListener("scroll", scheduleNativeThemeUpdate, {
+        passive: true,
+      });
+      window.addEventListener("resize", scheduleNativeThemeUpdate);
+    };
+
+    const detachNativeTheme = () => {
+      window.removeEventListener("scroll", scheduleNativeThemeUpdate);
+      window.removeEventListener("resize", scheduleNativeThemeUpdate);
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+    };
+
+    const startDesktopMotion = async (currentGeneration: number) => {
+      const [gsap, ScrollTrigger] = await Promise.all([
+        loadGsap(),
+        loadScrollTrigger(),
+      ]);
+      if (
+        disposed ||
+        currentGeneration !== generation ||
+        !motionQuery.matches
+      ) {
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+      const themeTrigger = ScrollTrigger.create({
+        trigger: section,
+        start: "top center",
+        onEnter: enableDarkMode,
+        onLeaveBack: disableDarkMode,
+        onRefresh(self) {
+          if (self.scroll() >= self.start) enableDarkMode();
+          else disableDarkMode();
+        },
+      });
+
       const masterTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -123,15 +174,36 @@ export function ParallaxPills() {
         masterTl.add(pillTl, pill.delay);
       });
 
-      return () => {
+      killDesktopMotion = () => {
         masterTl.scrollTrigger?.kill();
         masterTl.kill();
+        themeTrigger.kill();
       };
-    });
+    };
+
+    const configureMotion = () => {
+      generation += 1;
+      const currentGeneration = generation;
+      detachNativeTheme();
+      killDesktopMotion?.();
+      killDesktopMotion = undefined;
+
+      if (motionQuery.matches) {
+        void startDesktopMotion(currentGeneration);
+      } else {
+        attachNativeTheme();
+      }
+    };
+
+    configureMotion();
+    motionQuery.addEventListener("change", configureMotion);
 
     return () => {
-      mm.revert();
-      themeTrigger.kill();
+      disposed = true;
+      generation += 1;
+      motionQuery.removeEventListener("change", configureMotion);
+      detachNativeTheme();
+      killDesktopMotion?.();
       disableDarkMode();
     };
   }, [isSmoothScrollReady]);
@@ -144,7 +216,7 @@ export function ParallaxPills() {
             key={i}
             ref={(el) => { pillRefs.current[i] = el; }}
             aria-hidden
-            className="pointer-events-none absolute z-0 will-change-[transform,opacity,filter]"
+            className="parallax-pill pointer-events-none absolute z-0"
             style={{
               left: pill.x,
               top: `${pill.y}vh`,

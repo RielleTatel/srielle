@@ -1,13 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { FadeText } from "@/components/ui/FadeText";
 import { ProjectCard } from "@/components/ui/ProjectCard";
-import { ProjectModal } from "@/components/ui/ProjectModal";
 import { ScrollSlideIn } from "@/components/ui/ScrollSlideIn";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { projects, type Project } from "@/data/projects";
+
+const ProjectModal = dynamic(
+  () =>
+    import("@/components/ui/ProjectModal").then(
+      (module) => module.ProjectModal,
+    ),
+);
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -41,10 +48,12 @@ export function Projects() {
         ))}
       </ul>
 
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </section>
   );
 }

@@ -120,7 +120,6 @@ html {
   --color-accent: var(--accent);
   --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 html,
@@ -222,4 +221,24 @@ footer {
   margin-left: 1px;
   color: var(--foreground);
   animation: typewriter-blink 1s steps(1, end) infinite;
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .blur-text-char {
+    filter: none !important;
+  }
+
+  .fade-in-motion,
+  .fade-text-motion > span,
+  .kinetic-word {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
+
+@media (min-width: 768px) and (pointer: fine) {
+  .parallax-pill {
+    will-change: transform, opacity, filter;
+  }
 }

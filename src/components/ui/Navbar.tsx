@@ -1,11 +1,11 @@
 "use client";
 
 import type { MouseEvent } from "react";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { loadScrollSmoother, loadScrollTrigger } from "@/lib/gsap";
+import { scrollToAnchor } from "@/lib/scroll";
 
 const NAV_LINKS = [
   { href: "/#hero", label: "Home" },
@@ -16,7 +16,10 @@ const NAV_LINKS = [
 ];
 
 export function Navbar() {
-  const handleHomeAnchor = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleHomeAnchor = async (
+    event: MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     if (
       !href.startsWith("/#") ||
       window.location.pathname !== "/" ||
@@ -34,12 +37,22 @@ export function Navbar() {
     if (window.location.pathname + window.location.hash !== href) {
       window.history.pushState(null, "", href);
     }
+
+    if (window.matchMedia("(max-width: 767px), (pointer: coarse)").matches) {
+      scrollToAnchor(target);
+      return;
+    }
+
+    const [ScrollTrigger, ScrollSmoother] = await Promise.all([
+      loadScrollTrigger(),
+      loadScrollSmoother(),
+    ]);
     ScrollTrigger.refresh();
     const smoother = ScrollSmoother.get();
     if (smoother) {
       smoother.scrollTo(Math.max(0, smoother.offset(target, "top top") - 64), false);
     } else {
-      target.scrollIntoView();
+      scrollToAnchor(target);
     }
   };
 
@@ -48,10 +61,11 @@ export function Navbar() {
       <Container className="flex h-16 items-center justify-between">
         <Link href="/" aria-label="Srielle home" className="inline-flex items-center">
           <Image
-            src="/logo.svg"
+            src="/logo-optimized.webp"
             alt="Srielle logo"
             width={40}
             height={40}
+            sizes="40px"
             priority
           />
         </Link>
@@ -60,6 +74,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
+              prefetch={link.href === "/about" ? false : undefined}
               onClick={(event) => handleHomeAnchor(event, link.href)}
               className={`text-xs text-muted transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:text-sm ${link.desktopOnly ? "hidden sm:inline" : ""}`}
             >

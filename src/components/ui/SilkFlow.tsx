@@ -173,7 +173,21 @@ export default function SilkFlow({
     scanlineFrequency,
     resolutionScale,
   });
-  propsRef.current = {
+  useEffect(() => {
+    propsRef.current = {
+      color,
+      speed,
+      scale,
+      warpStrength,
+      contrast,
+      flowDirection,
+      hueShift,
+      noiseIntensity,
+      scanlineIntensity,
+      scanlineFrequency,
+      resolutionScale,
+    };
+  }, [
     color,
     speed,
     scale,
@@ -185,7 +199,7 @@ export default function SilkFlow({
     scanlineIntensity,
     scanlineFrequency,
     resolutionScale,
-  };
+  ]);
 
   useEffect(() => {
     const container = containerRef.current;

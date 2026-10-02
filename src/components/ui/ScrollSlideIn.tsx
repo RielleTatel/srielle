@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useSmoothScrollReady } from "@/components/ui/SmoothScroll";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsap, loadScrollTrigger } from "@/lib/gsap";
 
 type ScrollSlideInProps = {
   children: ReactNode;
@@ -27,27 +24,43 @@ export function ScrollSlideIn({
     const el = ref.current;
     if (!isSmoothScrollReady || !el) return;
 
-    const mm = gsap.matchMedia();
+    const query =
+      "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
+    if (!window.matchMedia(query).matches) return;
 
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const tween = gsap.from(el, {
-        x: from === "left" ? -distance : distance,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 80%",
-          once: true,
-        },
-      });
-      return () => {
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      };
-    });
+    let disposed = false;
+    let revert: (() => void) | undefined;
 
-    return () => mm.revert();
+    void Promise.all([loadGsap(), loadScrollTrigger()]).then(
+      ([gsap, ScrollTrigger]) => {
+        if (disposed) return;
+        gsap.registerPlugin(ScrollTrigger);
+        const mm = gsap.matchMedia();
+        mm.add(query, () => {
+          const tween = gsap.from(el, {
+            x: from === "left" ? -distance : distance,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 80%",
+              once: true,
+            },
+          });
+          return () => {
+            tween.scrollTrigger?.kill();
+            tween.kill();
+          };
+        });
+        revert = () => mm.revert();
+      },
+    );
+
+    return () => {
+      disposed = true;
+      revert?.();
+    };
   }, [from, distance, isSmoothScrollReady]);
 
   return (
