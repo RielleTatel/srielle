@@ -17,7 +17,7 @@ const SUBTITLE_PREFIX =
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const subtitleRef = useRef<HTMLSpanElement>(null);
-  const headlineRef = useRef<HTMLParagraphElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
   const [typingDone, setTypingDone] = useState(false);
   const isSmoothScrollReady = useSmoothScrollReady();
   const shouldSkipMotion = useShouldSkipMotion();
@@ -29,7 +29,6 @@ export function Hero() {
 
     const query =
       "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
-    if (!window.matchMedia(query).matches) return;
 
     let disposed = false;
     let revert: (() => void) | undefined;
@@ -40,7 +39,7 @@ export function Hero() {
         gsap.registerPlugin(ScrollTrigger);
         const mm = gsap.matchMedia();
         mm.add(query, () => {
-          const tween = gsap.to(section, {
+          gsap.to(section, {
             opacity: 0,
             filter: "blur(12px)",
             ease: "none",
@@ -51,10 +50,6 @@ export function Hero() {
               scrub: true,
             },
           });
-          return () => {
-            tween.scrollTrigger?.kill();
-            tween.kill();
-          };
         });
         revert = () => mm.revert();
       },
@@ -72,33 +67,32 @@ export function Hero() {
 
     const query =
       "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
-    if (!window.matchMedia(query).matches) {
-      node.textContent = SUBTITLE_PREFIX;
-      return;
-    }
-
     let disposed = false;
-    let killTween: (() => void) | undefined;
+    let revert: (() => void) | undefined;
 
     void Promise.all([loadGsap(), loadTextPlugin()]).then(
       ([gsap, TextPlugin]) => {
         if (disposed) return;
         gsap.registerPlugin(TextPlugin);
-        node.textContent = "";
-        const tween = gsap.to(node, {
-          text: SUBTITLE_PREFIX,
-          duration: 1.6,
-          ease: "none",
-          delay: 0.5,
-          onComplete: () => setTypingDone(true),
+        const mm = gsap.matchMedia();
+        mm.add(query, () => {
+          node.textContent = "";
+          gsap.to(node, {
+            text: SUBTITLE_PREFIX,
+            duration: 1.6,
+            ease: "none",
+            delay: 0.5,
+            onComplete: () => setTypingDone(true),
+          });
+          return () => { node.textContent = SUBTITLE_PREFIX; };
         });
-        killTween = () => tween.kill();
+        revert = () => mm.revert();
       },
     );
 
     return () => {
       disposed = true;
-      killTween?.();
+      revert?.();
     };
   }, []);
 
@@ -108,30 +102,31 @@ export function Hero() {
 
     const query =
       "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
-    if (!window.matchMedia(query).matches) return;
-
     let disposed = false;
-    let killTimeline: (() => void) | undefined;
+    let revert: (() => void) | undefined;
 
     void loadGsap().then((gsap) => {
       if (disposed) return;
-      const tl = gsap.timeline({ delay: 1.0 });
-      for (let i = 0; i < 8; i++) {
-        const intensity = 12 * (1 - i / 8);
-        tl.to(headline, {
-          x: gsap.utils.random(-intensity, intensity),
-          y: gsap.utils.random(-intensity * 0.5, intensity * 0.5),
-          rotation: gsap.utils.random(-3, 3),
-          duration: 0.05,
-        });
-      }
-      tl.to(headline, { x: 0, y: 0, rotation: 0, duration: 0.3 });
-      killTimeline = () => tl.kill();
+      const mm = gsap.matchMedia();
+      mm.add(query, () => {
+        const tl = gsap.timeline({ delay: 1.0 });
+        for (let i = 0; i < 8; i++) {
+          const intensity = 12 * (1 - i / 8);
+          tl.to(headline, {
+            x: gsap.utils.random(-intensity, intensity),
+            y: gsap.utils.random(-intensity * 0.5, intensity * 0.5),
+            rotation: gsap.utils.random(-3, 3),
+            duration: 0.05,
+          });
+        }
+        tl.to(headline, { x: 0, y: 0, rotation: 0, duration: 0.3 });
+      });
+      revert = () => mm.revert();
     });
 
     return () => {
       disposed = true;
-      killTimeline?.();
+      revert?.();
     };
   }, []);
 
@@ -144,12 +139,12 @@ export function Hero() {
       <Container className="relative z-10">
         <div className="flex flex-col items-center">
           <FadeIn immediate delay={0.02}>
-            <span className="relative inline-block h-40 w-40 overflow-hidden">
+            <span className="relative inline-block h-28 w-28 overflow-hidden sm:h-40 sm:w-40">
               <Image
                 src="/logo-optimized.webp"
                 alt="Srielle logo"
                 fill
-                sizes="160px"
+                sizes="(min-width: 640px) 160px, 112px"
                 className="object-cover"
                 priority
               />
@@ -157,14 +152,14 @@ export function Hero() {
           </FadeIn>
 
           <FadeIn immediate delay={0.05}>
-            <p
+            <h1
               ref={headlineRef}
-              className="text-foreground text-3xl -mt-8"
+              className="text-foreground -mt-6 sm:-mt-8"
               style={{
                 fontWeight: 700,
                 letterSpacing: "-0.06em",
-                lineHeight: 0.95,
-                fontSize: "clamp(5rem, 10vw, 2rem)",
+                lineHeight: 1.02,
+                fontSize: "clamp(1.5rem, 6.4vw, 5rem)",
                 textAlign: "center",
               }}
             >
@@ -183,17 +178,17 @@ export function Hero() {
               />
               <br />
               <BlurTextEffect
-                text="AND OPPORTUNTIES."
+                text="AND OPPORTUNITIES."
                 className="text-accent"
                 blurDirection="both"
                 blurIntensity={3}
                 blurWidth={30}
               />
-            </p>
+            </h1>
           </FadeIn>
 
           <FadeIn immediate delay={0.2}>
-            <p className="mt-6 max-w-2xl text-center text-base text-muted sm:text-lg">
+            <p className="mt-6 min-h-15 max-w-2xl text-center text-sm leading-relaxed text-muted sm:text-lg">
               <span ref={subtitleRef} aria-live="polite">
                 {SUBTITLE_PREFIX}
               </span>

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { Network, Sparkles } from "lucide-react";
 
 type TechItem = {
@@ -6,27 +7,25 @@ type TechItem = {
   icon: ReactNode;
 };
 
-// Brand glyphs via Simple Icons CDN (no install needed). Generic concepts
-// without a brand mark fall back to lucide-react icons.
-const simpleIcon = (slug: string, color: string, label: string) => (
-  // eslint-disable-next-line @next/next/no-img-element
-  <img
-    src={`https://cdn.simpleicons.org/${slug}/${color}`}
-    alt={label}
+// Local Devicon assets avoid a CDN dependency and keep logos visible in both palettes.
+const brandIcon = (slug: string) => (
+  <Image
+    src={`/brand-icons/${slug}.svg`}
+    alt=""
     width={20}
     height={20}
-    loading="lazy"
+    className="rounded-sm bg-[#fdfdfc] p-0.5"
   />
 );
 
 const TECH: TechItem[] = [
-  { name: "React", icon: simpleIcon("react", "61DAFB", "React") },
-  { name: "Next.js", icon: simpleIcon("nextdotjs", "FFFFFF", "Next.js") },
-  { name: "TypeScript", icon: simpleIcon("typescript", "3178C6", "TypeScript") },
-  { name: "Node.js", icon: simpleIcon("nodedotjs", "5FA04E", "Node.js") },
-  { name: "Python", icon: simpleIcon("python", "3776AB", "Python") },
-  { name: "Django", icon: simpleIcon("django", "0C4B33", "Django") },
-  { name: "PostgreSQL", icon: simpleIcon("postgresql", "4169E1", "PostgreSQL") },
+  { name: "React", icon: brandIcon("react") },
+  { name: "Next.js", icon: brandIcon("nextjs") },
+  { name: "TypeScript", icon: brandIcon("typescript") },
+  { name: "Node.js", icon: brandIcon("nodejs") },
+  { name: "Python", icon: brandIcon("python") },
+  { name: "Django", icon: brandIcon("django") },
+  { name: "PostgreSQL", icon: brandIcon("postgresql") },
   { name: "REST API", icon: <Network size={20} strokeWidth={1.75} /> },
   { name: "AI Integration", icon: <Sparkles size={20} strokeWidth={1.75} /> },
 ];
@@ -44,7 +43,7 @@ export function TechMarquee({
 
   return (
     <div
-      className="relative w-full overflow-hidden"
+      className="tech-marquee relative w-full overflow-hidden"
       style={{
         maskImage:
           "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)",
@@ -53,7 +52,7 @@ export function TechMarquee({
       }}
     >
       <ul
-        className="flex w-max items-center gap-3"
+        className="tech-marquee-track flex w-max items-center gap-3"
         style={{
           animation: `marquee-scroll ${durationSeconds}s linear infinite`,
           animationDirection: reverse ? "reverse" : "normal",

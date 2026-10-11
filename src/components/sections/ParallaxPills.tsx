@@ -7,7 +7,7 @@ import { loadGsap, loadScrollTrigger } from "@/lib/gsap";
 
 type Pill = {
   x: string;
-  y: number;       // initial top position in vh
+  y: number;       // initial top position as a percentage of the stage
   speed: number;
   size: number;
   opacity: number;
@@ -47,170 +47,115 @@ export function ParallaxPills() {
     if (!isSmoothScrollReady || !section) return;
 
     const html = document.documentElement;
-    const motionQuery = window.matchMedia(
-      "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
-    );
+    const stage = section.firstElementChild as HTMLDivElement;
     let disposed = false;
-    let generation = 0;
-    let frame = 0;
-    let isDarkMode = false;
-    let killDesktopMotion: (() => void) | undefined;
-    const enableDarkMode = () => {
-      isDarkMode = true;
-      html.classList.add("dark-mode");
-    };
-    const disableDarkMode = () => {
-      isDarkMode = false;
-      html.classList.remove("dark-mode");
-    };
+    let refreshFrame = 0;
+    let themeObserver: IntersectionObserver;
+    let revertMotion: (() => void) | undefined;
 
-    const updateNativeTheme = () => {
-      frame = 0;
-      const shouldBeDark =
-        section.getBoundingClientRect().top <= window.innerHeight / 2;
-      if (shouldBeDark === isDarkMode) return;
-      isDarkMode = shouldBeDark;
-      html.classList.toggle("dark-mode", shouldBeDark);
+    // Keep the page-wide theme switch on native and smoothed scrolling alike.
+    // Observing the section avoids running a scroll handler on every frame.
+    const observeTheme = () => {
+      themeObserver?.disconnect();
+      themeObserver = new IntersectionObserver(([entry]) => {
+        html.classList.toggle(
+          "dark-mode",
+          entry.isIntersecting || entry.boundingClientRect.top < 0,
+        );
+      }, { rootMargin: `0px 0px -${window.innerHeight / 2}px 0px` });
+      themeObserver.observe(section);
     };
+    observeTheme();
+    window.addEventListener("resize", observeTheme);
 
-    const scheduleNativeThemeUpdate = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(updateNativeTheme);
-    };
-
-    const attachNativeTheme = () => {
-      updateNativeTheme();
-      window.addEventListener("scroll", scheduleNativeThemeUpdate, {
-        passive: true,
-      });
-      window.addEventListener("resize", scheduleNativeThemeUpdate);
-    };
-
-    const detachNativeTheme = () => {
-      window.removeEventListener("scroll", scheduleNativeThemeUpdate);
-      window.removeEventListener("resize", scheduleNativeThemeUpdate);
-      window.cancelAnimationFrame(frame);
-      frame = 0;
-    };
-
-    const startDesktopMotion = async (currentGeneration: number) => {
-      const [gsap, ScrollTrigger] = await Promise.all([
-        loadGsap(),
-        loadScrollTrigger(),
-      ]);
-      if (
-        disposed ||
-        currentGeneration !== generation ||
-        !motionQuery.matches
-      ) {
-        return;
-      }
-
+    void Promise.all([loadGsap(), loadScrollTrigger()]).then(([gsap, ScrollTrigger]) => {
+      if (disposed) return;
       gsap.registerPlugin(ScrollTrigger);
-      const themeTrigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top center",
-        onEnter: enableDarkMode,
-        onLeaveBack: disableDarkMode,
-        onRefresh(self) {
-          if (self.scroll() >= self.start) enableDarkMode();
-          else disableDarkMode();
-        },
-      });
+      const mm = gsap.matchMedia();
+      mm.add({
+        all: "all",
+        desktop: "(min-width: 768px) and (pointer: fine)",
+        reduceMotion: "(prefers-reduced-motion: reduce)",
+      }, (context) => {
+        const { desktop, reduceMotion } = context.conditions!;
+        if (reduceMotion) return;
 
-      const masterTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: "+=250%",
-          pin: true,
-          scrub: true,
-          anticipatePin: 1,
-        },
-      });
-
-      PILLS.forEach((pill, i) => {
-        const el = pillRefs.current[i];
-        if (!el) return;
-        const maxStretch = 1 + pill.speed * 1.5;
-
-        // Pills are positioned by CSS top:${pill.y}vh and translated upward via y.
-        // exitTranslation puts the pill's top at -15vh (safely above the viewport);
-        // the fade phase travels a further 25vh while opacity/blur ramp out.
-        const exitTranslation = pill.y + 15;
-        const fadeTranslation = 25;
-
-        // Pre-state: already stretched and visible at full opacity. Pills with
-        // pill.y > 100 are below the viewport, so they're naturally hidden by
-        // the container's overflow-hidden until they translate into view.
-        // No fade-in needed — they emerge from the bottom edge naturally.
-        gsap.set(el, {
-          y: 0,
-          scaleY: maxStretch,
-          opacity: pill.opacity,
-          filter: "blur(0px)",
-        });
-
-        const pillTl = gsap.timeline();
-        pillTl
-          // Phase 1 — travel upward through the viewport.
-          .to(el, {
-            y: `-${exitTranslation}vh`,
-            duration: 0.85,
-            ease: "none",
-          })
-          // Phase 2 — fade + blur as the pill clears the top edge.
-          .to(el, {
-            y: `-${exitTranslation + fadeTranslation}vh`,
-            opacity: 0,
-            filter: "blur(20px)",
-            duration: 0.15,
-            ease: "power2.in",
+        if (!desktop) {
+          // Touch screens keep native scrolling with six lightweight parallax
+          // layers. No pinning or blur; only transform and opacity change.
+          PILLS.slice(0, 6).forEach((pill, index) => {
+            const element = pillRefs.current[index];
+            if (!element) return;
+            gsap.fromTo(element, {
+              y: () => stage.clientHeight * 0.12 * pill.speed,
+              scaleY: 1 + pill.speed * 0.75,
+              opacity: pill.opacity * 0.7,
+            }, {
+              y: () => -stage.clientHeight * 0.28 * pill.speed,
+              ease: "none",
+              scrollTrigger: {
+                trigger: section,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
+            });
+          });
+        } else {
+          const timeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: () => `+=${stage.clientHeight * 2.5}`,
+              pin: true,
+              scrub: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
           });
 
-        // Pills wait at their startY until master reaches their delay, then go.
-        // Staggered delays = different pills in different lifecycle phases at any
-        // given scroll position, which produces the continuous wave.
-        masterTl.add(pillTl, pill.delay);
-      });
+          PILLS.forEach((pill, index) => {
+            const element = pillRefs.current[index];
+            if (!element) return;
+            gsap.set(element, {
+              y: 0,
+              scaleY: 1 + pill.speed * 1.5,
+              opacity: pill.opacity,
+            });
+            const exitDistance = () => -(pill.y + 15) / 100 * stage.clientHeight;
+            const fadeDistance = () => -(pill.y + 40) / 100 * stage.clientHeight;
+            timeline
+              .to(element, { y: exitDistance, duration: 0.85, ease: "none" }, pill.delay)
+              .to(element, {
+                y: fadeDistance,
+                opacity: 0,
+                duration: 0.15,
+                ease: "power2.in",
+              }, pill.delay + 0.85);
+          });
+        }
 
-      killDesktopMotion = () => {
-        masterTl.scrollTrigger?.kill();
-        masterTl.kill();
-        themeTrigger.kill();
-      };
-    };
-
-    const configureMotion = () => {
-      generation += 1;
-      const currentGeneration = generation;
-      detachNativeTheme();
-      killDesktopMotion?.();
-      killDesktopMotion = undefined;
-
-      if (motionQuery.matches) {
-        void startDesktopMotion(currentGeneration);
-      } else {
-        attachNativeTheme();
-      }
-    };
-
-    configureMotion();
-    motionQuery.addEventListener("change", configureMotion);
+        window.cancelAnimationFrame(refreshFrame);
+        refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+      }, section);
+      // matchMedia reverts transforms and pin spacers when modes change.
+      revertMotion = () => mm.revert();
+    });
 
     return () => {
       disposed = true;
-      generation += 1;
-      motionQuery.removeEventListener("change", configureMotion);
-      detachNativeTheme();
-      killDesktopMotion?.();
-      disableDarkMode();
+      window.cancelAnimationFrame(refreshFrame);
+      window.removeEventListener("resize", observeTheme);
+      themeObserver.disconnect();
+      revertMotion?.();
+      html.classList.remove("dark-mode");
     };
   }, [isSmoothScrollReady]);
 
   return (
     <section ref={sectionRef} id="parallax-pills" className="relative">
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="parallax-stage relative h-[100svh] w-full overflow-hidden">
         {PILLS.map((pill, i) => (
           <div
             key={i}
@@ -219,12 +164,14 @@ export function ParallaxPills() {
             className="parallax-pill pointer-events-none absolute z-0"
             style={{
               left: pill.x,
-              top: `${pill.y}vh`,
+              top: `${pill.y}%`,
               width: 18,
               height: pill.size,
               borderRadius: 999,
               background: "var(--pill-gradient)",
               transformOrigin: "center center",
+              transform: `scaleY(${1 + pill.speed * 0.7})`,
+              opacity: pill.opacity,
             }}
           />
         ))}
@@ -240,7 +187,7 @@ export function ParallaxPills() {
                 fontWeight: 700,
                 letterSpacing: "-0.04em",
                 lineHeight: 1,
-                fontSize: "clamp(2.5rem, 6vw, 5rem)",
+                fontSize: "clamp(1.75rem, 6vw, 5rem)",
               }}
             >
               <FadeText>The goal was never just to code.</FadeText>

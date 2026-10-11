@@ -34,12 +34,14 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const touchOrSmallScreen = window.matchMedia(
-      "(max-width: 767px), (pointer: coarse)",
+      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)",
     );
     let readyFrame = 0;
     let disposed = false;
+    let generation = 0;
 
     const configureScroll = async () => {
+      const currentGeneration = ++generation;
       window.cancelAnimationFrame(readyFrame);
       smootherPlugin.current?.get()?.kill();
 
@@ -54,7 +56,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         loadScrollTrigger(),
         loadScrollSmoother(),
       ]);
-      if (disposed || useNativeScroll || touchOrSmallScreen.matches) return;
+      if (disposed || currentGeneration !== generation || useNativeScroll || touchOrSmallScreen.matches) return;
 
       gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
       smootherPlugin.current = ScrollSmoother;
@@ -74,6 +76,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
     return () => {
       disposed = true;
+      generation += 1;
       touchOrSmallScreen.removeEventListener("change", handleScrollModeChange);
       window.cancelAnimationFrame(readyFrame);
       smootherPlugin.current?.get()?.kill();

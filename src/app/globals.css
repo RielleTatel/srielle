@@ -237,8 +237,18 @@ footer {
   }
 }
 
-@media (min-width: 768px) and (pointer: fine) {
+@media (prefers-reduced-motion: no-preference) {
   .parallax-pill {
-    will-change: transform, opacity, filter;
+    will-change: transform, opacity;
   }
+}
+
+@media (max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .parallax-pill:nth-child(n + 7) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-marquee { mask-image: none !important; }
+  .tech-marquee-track { width: auto; flex-wrap: wrap; justify-content: center; animation: none !important; }
+  .tech-marquee-track > [aria-hidden="true"] { display: none; }
 }
