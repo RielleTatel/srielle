@@ -1,0 +1,35 @@
+/* Small square controls and tool tiles use an 8px radius within the page's
+   existing 8/12/24px shape scale. Brand colors belong to the logos; interactive
+   borders and focus states use the shared green accent. */
+.profile { margin-top: 22px; }
+.socials { display: flex; align-items: center; gap: 10px; }
+.social {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgb(253 253 252 / 72%);
+}
+.social img { display: block; object-fit: contain; }
+.social:hover { border-color: var(--accent); background: #f0f4ed; }
+.social:active { transform: translateY(1px); }
+.socials .social:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.toolbox { margin-top: 28px; }
+.label { color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: 11px; line-height: 1.5; letter-spacing: -0.025em; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.tool { display: grid; width: 40px; height: 40px; place-items: center; border: 1px solid rgb(32 32 34 / 6%); border-radius: 8px; background: rgb(253 253 252 / 50%); }
+.tool img { display: block; object-fit: contain; }
+
+@media (max-width: 767px) {
+  .profile { margin-top: 20px; }
+  .toolbox { margin-top: 24px; }
+  .tools { gap: 7px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .social { transition: transform 160ms ease-out; }
+  .social:hover { transform: translateY(-2px); }
+  .social:active { transform: translateY(1px); }
+}

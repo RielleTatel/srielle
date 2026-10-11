@@ -1,49 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
-
-const experience = [
-  {
-    year: "2026",
-    title: "System Developer",
-    organization: "CITS, Ateneo de Zamboanga University",
-    period: "July 2026 - Present",
-    description:
-      "Selected for the CITS ALP program to develop production software for AdZU. I'm building a thesis inventory system that centralizes 500+ records, with approval workflows and faculty teaching load scheduling.",
-  },
-  {
-    year: "2026",
-    title: "Founder & Full-Stack Developer",
-    organization: "Debately",
-    period: "April 2026",
-    description:
-      "I built a free-to-use debate tournament platform for registration, participant management, finance tracking, and event operations. It supports 80+ teams and 240+ participants, with a configurable three-phase registration sync system.",
-  },
-  {
-    year: "2024-25",
-    title: "President",
-    organization: "GDG on Campus Blue Eagle",
-    period: "Academic year 2024-2025",
-    description:
-      "I led a 60+ member developer community and coordinated 30 officers. Alongside BlueCode, I organized hackathon preparation, AI workshops, and digital literacy initiatives including Ready, Set, Hack!, AIEnhance, and ClickStart.",
-  },
-  {
-    year: "2024-25",
-    title: "Internal Vice-President",
-    organization: "Ateneo Informatics Computing Guild",
-    period: "Academic year 2024-2025",
-    description:
-      "I managed internal operations for an academic organization serving 300+ students in computing and new media programs, improving coordination, governance, and internal communications.",
-  },
-];
-
-const affiliations = [
-  { name: "GDG on Campus Blue Eagle", role: "Member, former President" },
-  { name: "Ateneo Informatics Computing Guild", role: "Member, former Internal Vice-President" },
-  { name: "Ateneo Debate Union", role: "Member" },
-  { name: "Rotaract Club of Zamboanga City West", role: "Member" },
-  { name: "El Consejo Atenista Judicial Council", role: "Senior Associate Justice" },
-];
+import { ArrowUpRight } from "lucide-react";
+import { Experience } from "@/components/sections/Experience";
+import { Affiliations } from "@/components/sections/Affiliations";
+import { AboutProfile } from "@/components/sections/AboutProfile";
 
 export function About() {
   return (
@@ -71,14 +31,11 @@ export function About() {
               Get in touch <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden />
             </Link>
           </div>
+          <AboutProfile />
         </div>
       </section>
 
-      <dl className="about-highlights" aria-label="Community and startup highlights">
-        <div><dt>Community members</dt><dd>60+</dd></div>
-        <div><dt>Hackathon participants</dt><dd>100+</dd></div>
-        <div><dt>Startup funding</dt><dd>₱250k</dd></div>
-      </dl>
+      <Experience />
 
       <section id="about-stories" className="about-section" aria-labelledby="about-stories-title">
         <header className="about-section-heading">
@@ -131,27 +88,7 @@ export function About() {
         </div>
       </section>
 
-      <section id="experience" className="about-section" aria-labelledby="about-experience-title">
-        <header className="about-section-heading">
-          <h2 id="about-experience-title">Experience</h2>
-        </header>
-        <div className="about-experience-list">
-          {experience.map((role) => (
-            <details key={role.title} className="about-experience-row">
-              <summary>
-                <span className="about-experience-year">{role.year}</span>
-                <h3>{role.title}</h3>
-                <span className="about-experience-org">{role.organization}</span>
-                <ChevronDown size={16} strokeWidth={1.5} className="about-disclosure-icon" aria-hidden />
-              </summary>
-              <div className="about-experience-detail">
-                <p className="about-period">{role.period}</p>
-                <p>{role.description}</p>
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
+      <Affiliations />
 
       <section id="speaking" className="about-section" aria-labelledby="about-speaking-title">
         <header className="about-section-heading">
@@ -228,19 +165,6 @@ export function About() {
         </article>
       </section>
 
-      <section id="affiliations" className="about-section" aria-labelledby="about-affiliations-title">
-        <header className="about-section-heading">
-          <h2 id="about-affiliations-title">Affiliations</h2>
-        </header>
-        <dl className="about-affiliations">
-          {affiliations.map((affiliation) => (
-            <div key={affiliation.name}>
-              <dt>{affiliation.name}</dt>
-              <dd>{affiliation.role}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
     </>
   );
 }

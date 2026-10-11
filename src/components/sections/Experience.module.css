@@ -1,0 +1,260 @@
+/* Cards borrow each organization's logo palette.
+   The page's green accent stays in navigation and keyboard focus.
+   Shapes: 20px cards, 24px dialog, 12px logos, pill-shaped metadata/actions.
+   Cards stay static; the modal uses the browser's native top layer. */
+.section {
+  position: relative;
+  left: 50%;
+  width: min(1040px, calc(100vw - 32px));
+  margin-top: 56px;
+  transform: translateX(-50%);
+}
+
+.heading { width: min(100%, 940px); margin: 0 auto 28px; }
+.heading h2 {
+  color: var(--muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.cards { display: grid; gap: 16px; }
+
+.card {
+  --card-base: rgb(53 107 69 / 9%);
+  --card-border: rgb(61 110 74 / 22%);
+  --card-ink: #203c2c;
+  --card-muted: #516656;
+  --dialog-base: #eef3ed;
+  position: relative;
+  padding: 24px 28px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  background: var(--card-base);
+  color: var(--card-ink);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 55%);
+}
+
+.card[data-company="symph"] {
+  --card-base: rgb(50 109 180 / 9%);
+  --card-border: rgb(71 117 172 / 22%);
+  --card-ink: #182b42;
+  --card-muted: #546578;
+  --dialog-base: #eef3fa;
+}
+
+.card[data-company="cits"] {
+  --card-base: rgb(70 79 138 / 8%);
+  --card-border: rgb(79 88 137 / 22%);
+  --card-ink: #292f4b;
+  --card-muted: #5b6078;
+  --dialog-base: #f0f1f8;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.kind {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  padding: 4px 11px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 40%);
+  color: var(--card-ink);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.period { color: var(--card-muted); font-size: 11px; line-height: 1.7; }
+.period:only-child { margin-left: auto; }
+
+.cardHeader {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+  margin-top: 18px;
+}
+
+.logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.personalLogo { object-fit: cover; border-radius: 0; }
+.card[data-company="freelance"] .logo { width: 96px; }
+.card[data-company="freelance"] .cardHeader { grid-template-columns: 96px minmax(0, 1fr); }
+
+.company {
+  color: var(--card-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.identity h3 {
+  margin-top: 8px;
+  font-size: clamp(24px, 2.2vw, 30px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.045em;
+  text-wrap: pretty;
+}
+
+.cardFooter {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  margin-top: 12px;
+  padding-right: 150px;
+}
+
+.location { display: flex; align-items: center; gap: 8px; color: var(--card-muted); font-size: 12px; line-height: 1.7; }
+.location svg { flex-shrink: 0; }
+
+.openButton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 24px 28px;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+.buttonLabel {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 40%);
+  color: var(--card-ink);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.openButton:hover .buttonLabel { background: var(--card-ink); color: #fff; border-color: var(--card-ink); }
+.openButton:focus-visible { outline: 3px solid var(--accent); outline-offset: -5px; }
+.openButton:focus-visible .buttonLabel { background: var(--card-ink); color: #fff; }
+.openButton:active .buttonLabel { background: #fff; color: var(--card-ink); }
+
+.dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  background: var(--dialog-base);
+  color: var(--card-ink);
+}
+
+.dialog::backdrop { background: rgb(10 17 24 / 76%); backdrop-filter: blur(6px); }
+.dialogBody { position: relative; padding: 44px; }
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 45%);
+  color: var(--card-ink);
+  cursor: pointer;
+}
+
+.closeButton:hover { background: var(--card-ink); color: #fff; }
+.closeButton:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.dialogHeading { display: flex; align-items: center; gap: 20px; padding-right: 16px; }
+.dialogLogo { width: 64px; height: 64px; flex-shrink: 0; border-radius: 12px; object-fit: contain; }
+.dialogHeading h2 { margin-top: 8px; font-size: 26px; font-weight: 500; line-height: 1.2; letter-spacing: -0.035em; }
+.dialogHeading .company { font-size: 12px; }
+.dialogPeriod { margin-top: 26px; color: var(--card-muted); font-family: var(--font-geist-mono), monospace; font-size: 12px; line-height: 1.7; }
+.dialogLocation { display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; color: var(--card-muted); font-size: 12px; line-height: 1.7; }
+.dialogLocation svg { flex-shrink: 0; margin-top: 3px; }
+
+.highlights {
+  display: grid;
+  gap: 20px;
+  margin-top: 28px;
+  padding-top: 28px;
+  padding-left: 17px;
+  border-top: 1px solid var(--card-border);
+  list-style: disc;
+  color: var(--card-muted);
+  font-size: 15px;
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+.highlights li { padding-left: 5px; }
+.highlights li::marker { color: var(--card-muted); font-size: 9px; }
+.highlights strong { color: var(--card-ink); font-weight: 600; }
+.description { margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--card-border); color: var(--card-muted); font-size: 15px; line-height: 1.8; }
+
+@media (min-width: 640px) {
+  .section { width: min(1040px, calc(100vw - 80px)); margin-top: 72px; }
+}
+
+@media (min-width: 1024px) {
+  .section { width: min(1040px, calc(100vw - 96px)); margin-top: 88px; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .card { padding: 24px 28px; }
+  .openButton { padding-inline: 28px; }
+}
+
+@media (max-width: 767px) {
+  .heading { padding-inline: 8px; margin-bottom: 22px; }
+  .cards { gap: 16px; }
+  .card { padding: 20px; border-radius: 18px; }
+  .meta { align-items: flex-start; flex-wrap: wrap; gap: 10px 14px; }
+  .kind { min-height: 28px; padding: 4px 11px; font-size: 10px; }
+  .period { align-self: center; font-size: 10px; }
+  .cardHeader, .card[data-company="freelance"] .cardHeader { grid-template-columns: 60px minmax(0, 1fr); align-items: start; gap: 16px; margin-top: 20px; }
+  .logo, .card[data-company="freelance"] .logo { width: 60px; height: 60px; border-radius: 10px; }
+  .card[data-company="freelance"] .logo { width: 76px; object-fit: cover; border-radius: 0; }
+  .card[data-company="freelance"] .cardHeader { grid-template-columns: 76px minmax(0, 1fr); }
+  .identity { display: contents; }
+  .company { align-self: center; font-size: 11px; line-height: 1.7; }
+  .identity h3 { grid-column: 1 / -1; margin-top: 0; font-size: 25px; }
+  .cardFooter { margin-top: 18px; padding-right: 130px; }
+  .location { font-size: 11px; gap: 6px; }
+  .openButton { padding: 20px; }
+  .buttonLabel { gap: 14px; padding-inline: 12px; font-size: 12px; }
+  .dialogBody { padding: 64px 24px 28px; }
+  .dialogHeading { gap: 14px; align-items: flex-start; padding-right: 0; }
+  .dialogHeading h2 { font-size: 23px; }
+  .dialogHeading .company { font-size: 11px; }
+  .dialogPeriod { font-size: 11px; }
+  .highlights, .description { font-size: 14px; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .dialog::backdrop { background: #131d26; backdrop-filter: none; }
+}

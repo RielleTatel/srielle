@@ -1,0 +1,97 @@
+/* Paper-colored cards keep the About palette while recreating the reference's
+   overlapping deck. Local layers: far cards 1, adjacent cards 2, front card 3.
+   Transform/opacity transitions are only triggered by selection. */
+.section {
+  position: relative;
+  left: 50%;
+  width: min(1200px, calc(100vw - 32px));
+  margin-top: 88px;
+  transform: translateX(-50%);
+}
+
+.heading { width: min(100%, 940px); margin: 0 auto 10px; }
+.heading h2 { color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: 18px; font-weight: 400; letter-spacing: -0.04em; }
+.stage { display: grid; isolation: isolate; overflow: clip; padding: 32px 0 84px; touch-action: pan-y; }
+
+.card {
+  --deck-x: 0%;
+  --deck-y: 0px;
+  --deck-rotation: 0deg;
+  --deck-scale: 1;
+  position: relative;
+  z-index: 3;
+  grid-area: 1 / 1;
+  justify-self: center;
+  width: min(580px, 58%);
+  min-height: 320px;
+  padding: 36px;
+  border: 1px solid #c1cdbb;
+  border-radius: 24px;
+  background: #f7f9f5;
+  color: var(--foreground);
+  transform: translateX(var(--deck-x)) translateY(var(--deck-y)) rotate(var(--deck-rotation)) scale(var(--deck-scale));
+  transition: transform 580ms cubic-bezier(0.22, 0.68, 0, 1), opacity 280ms ease-out;
+}
+
+.card[data-offset="0"] { box-shadow: 0 22px 50px rgb(72 81 68 / 12%); }
+.card[data-offset="-1"] { --deck-x: -53%; --deck-y: 44px; --deck-rotation: -12deg; --deck-scale: 0.9; z-index: 2; }
+.card[data-offset="1"] { --deck-x: 53%; --deck-y: 44px; --deck-rotation: 12deg; --deck-scale: 0.9; z-index: 2; }
+.card[data-offset="-2"] { --deck-x: -62%; --deck-y: 72px; --deck-rotation: -16deg; --deck-scale: 0.82; z-index: 1; }
+.card[data-offset="2"] { --deck-x: 62%; --deck-y: 72px; --deck-rotation: 16deg; --deck-scale: 0.82; z-index: 1; }
+.card:is([data-offset="-2"], [data-offset="2"]) { opacity: 0; pointer-events: none; }
+.card:not([data-offset="0"]) { border-color: #d7ded2; background: #f0f3ed; }
+.card:not([data-offset="0"]) .cardContent { opacity: 0.5; }
+
+.cardContent { display: flex; height: 100%; flex-direction: column; align-items: flex-start; }
+.membership { display: inline-flex; align-items: center; min-height: 32px; max-width: 100%; padding: 7px 13px; border: 1px solid #d5dfcd; border-radius: 999px; background: #e7eedf; color: #354c2b; font-family: var(--font-geist-mono), monospace; font-size: 11px; line-height: 1.5; }
+.brand { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 22px; align-items: center; margin-top: 38px; }
+.logo { display: block; width: 72px; height: 72px; border: 1px solid rgb(32 32 34 / 8%); border-radius: 16px; object-fit: contain; }
+.brand h3 { font-family: var(--font-geist-mono), monospace; font-size: clamp(23px, 2vw, 28px); font-weight: 400; letter-spacing: -0.06em; line-height: 1.35; text-wrap: pretty; }
+.history { margin-top: 26px; color: var(--muted); font-size: 17px; line-height: 1.5; letter-spacing: -0.015em; }
+.selectCard { position: absolute; inset: 0; border-radius: inherit; cursor: pointer; }
+.selectCard:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
+
+.controls { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 4px; }
+.controls > button { display: grid; width: 44px; height: 44px; flex-shrink: 0; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: rgb(253 253 252 / 85%); color: var(--foreground); cursor: pointer; }
+.controls > button:hover { background: #e7eedf; border-color: #c1cdbb; }
+.controls > button:active { transform: scale(0.97); }
+.controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.tabs button { min-height: 44px; padding: 10px 12px; border-bottom: 1px solid transparent; color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: 11px; line-height: 1.5; white-space: nowrap; cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); }
+.tabs button:hover { color: var(--foreground); }
+.empty { padding-block: 40px; color: var(--muted); }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+@media (min-width: 640px) {
+  .section { width: min(1200px, calc(100vw - 80px)); }
+}
+
+@media (min-width: 1024px) {
+  .section { width: min(1200px, calc(100vw - 96px)); margin-top: 112px; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .card { width: 70%; padding: 30px; }
+  .brand { gap: 18px; }
+  .brand h3 { font-size: 24px; }
+}
+
+@media (max-width: 767px) {
+  .heading { padding-inline: 8px; margin-bottom: 6px; }
+  .stage { padding: 20px 0 24px; }
+  .card { width: 100%; min-height: 310px; padding: 28px 24px; border-radius: 20px; transform: none; }
+  .card:not([data-offset="0"]) { visibility: hidden; opacity: 0; pointer-events: none; }
+  .selectCard { display: none; }
+  .membership { font-size: 10px; }
+  .brand { grid-template-columns: 1fr; gap: 22px; margin-top: 28px; }
+  .logo { width: 56px; height: 56px; border-radius: 12px; }
+  .brand h3 { font-size: 23px; }
+  .controls { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 6px; }
+  .tabs { gap: 0; }
+  .tabs button { padding-inline: 8px; font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}
