@@ -74,14 +74,16 @@ export function ParallaxPills() {
       const mm = gsap.matchMedia();
       mm.add({
         all: "all",
+        mobile: "(max-width: 767px)",
         desktop: "(min-width: 768px) and (pointer: fine)",
         reduceMotion: "(prefers-reduced-motion: reduce)",
       }, (context) => {
-        const { desktop, reduceMotion } = context.conditions!;
-        if (reduceMotion) return;
+        const { desktop, mobile, reduceMotion } = context.conditions!;
+        // Phones show no pills (hidden in CSS), so there is nothing to animate.
+        if (reduceMotion || mobile) return;
 
         if (!desktop) {
-          // Touch screens keep native scrolling with six lightweight parallax
+          // Touch tablets keep native scrolling with six lightweight parallax
           // layers. No pinning or blur; only transform and opacity change.
           PILLS.slice(0, 6).forEach((pill, index) => {
             const element = pillRefs.current[index];
@@ -161,7 +163,7 @@ export function ParallaxPills() {
             key={i}
             ref={(el) => { pillRefs.current[i] = el; }}
             aria-hidden
-            className="parallax-pill pointer-events-none absolute z-0"
+            className="parallax-pill pointer-events-none absolute z-0 max-md:hidden"
             style={{
               left: pill.x,
               top: `${pill.y}%`,

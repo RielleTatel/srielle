@@ -13,8 +13,7 @@ export type Role = {
   metrics: Metric[];
   highlights: string[];
   stack?: string[];
-  /** Slugs from data/projects.ts, listed on the card in this order. */
-  projectSlugs?: string[];
+  link?: { href: string; label: string };
 };
 
 export const experience: Role[] = [
@@ -63,8 +62,13 @@ export const experience: Role[] = [
     title: "Freelance Software Developer",
     kind: "Freelance",
     logo: { src: "/logo-optimized.webp", alt: "Srielle logo" },
-    metrics: [],
-    highlights: [],
-    projectSlugs: ["autocare-plus", "council-of-organizations", "unyon-mindanao-portal"],
+    metrics: [
+      { figure: "5+", label: "clients" },
+      { figure: "3", label: "products shipped" },
+    ],
+    highlights: [
+      "Web and mobile products for vehicle care, campus life, and member administration, from first sketch to launch.",
+    ],
+    link: { href: "/#projects", label: "See full case studies" },
   },
 ];

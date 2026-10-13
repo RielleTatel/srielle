@@ -2,11 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { experience, type Role } from "@/data/experience";
-import { projects } from "@/data/projects";
 import styles from "./Experience.module.css";
 
 // Brand-led cards, no modal: impact figures lead, a compressed summary and
-// the stack follow. Freelance lists its shipped projects instead of bullets.
+// the stack follow. Freelance shows general statistics and links to projects.
 export function Experience() {
   return (
     <section
@@ -65,10 +64,6 @@ export function Experience() {
 }
 
 function RoleBody({ role }: { role: Role }) {
-  const roleProjects = (role.projectSlugs ?? [])
-    .map((slug) => projects.find((project) => project.slug === slug))
-    .filter((project) => project !== undefined);
-
   return (
     <>
       {role.metrics.length > 0 && (
@@ -90,21 +85,6 @@ function RoleBody({ role }: { role: Role }) {
         </ul>
       )}
 
-      {roleProjects.length > 0 && (
-        <ul className={styles.projects}>
-          {roleProjects.map((project) => (
-            <li key={project.slug} className={styles.project}>
-              <div className={styles.projectCopy}>
-                <h4>{project.title}</h4>
-                <p>{project.tagline}</p>
-                <p className={styles.projectStack}>{project.services.join(", ")}</p>
-              </div>
-              <p className={styles.projectFigure}>{project.impact.figure}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-
       {role.stack && (
         <ul className={styles.stack} aria-label="Technologies used">
           {role.stack.map((item) => (
@@ -113,9 +93,9 @@ function RoleBody({ role }: { role: Role }) {
         </ul>
       )}
 
-      {roleProjects.length > 0 && (
-        <Link href="/#projects" className={styles.more}>
-          See full case studies <ArrowUpRight size={15} strokeWidth={1.5} aria-hidden="true" />
+      {role.link && (
+        <Link href={role.link.href} className={styles.more}>
+          {role.link.label} <ArrowUpRight size={15} strokeWidth={1.5} aria-hidden="true" />
         </Link>
       )}
     </>
