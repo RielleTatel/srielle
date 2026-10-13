@@ -1,11 +1,10 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { experience, type Role } from "@/data/experience";
 import styles from "./Experience.module.css";
 
 // Brand-led cards, no modal: impact figures lead, a compressed summary and
-// the stack follow. Freelance shows general statistics and links to projects.
+// the stack follow. Freelance shows general statistics only.
 export function Experience() {
   return (
     <section
@@ -93,11 +92,6 @@ function RoleBody({ role }: { role: Role }) {
         </ul>
       )}
 
-      {role.link && (
-        <Link href={role.link.href} className={styles.more}>
-          {role.link.label} <ArrowUpRight size={15} strokeWidth={1.5} aria-hidden="true" />
-        </Link>
-      )}
     </>
   );
 }

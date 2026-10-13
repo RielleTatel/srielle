@@ -13,7 +13,6 @@ export type Role = {
   metrics: Metric[];
   highlights: string[];
   stack?: string[];
-  link?: { href: string; label: string };
 };
 
 export const experience: Role[] = [
@@ -66,9 +65,6 @@ export const experience: Role[] = [
       { figure: "5+", label: "clients" },
       { figure: "3", label: "products shipped" },
     ],
-    highlights: [
-      "Web and mobile products for vehicle care, campus life, and member administration, from first sketch to launch.",
-    ],
-    link: { href: "/#projects", label: "See full case studies" },
+    highlights: [],
   },
 ];
