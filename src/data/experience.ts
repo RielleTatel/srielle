@@ -38,9 +38,8 @@ export const experience: Role[] = [
     city: "Zamboanga City",
     location: "La Purisima St., Zamboanga City 7000",
     highlights: [
-      "Selected for the CITS Active Learning Program (ALP) to develop and deploy production-grade software systems supporting Ateneo de Zamboanga University.",
-      "Designed and developed a Thesis Inventory Management System that digitized and centralized 500+ thesis records, improving searchability and access for students and faculty.",
-      "Currently developing enterprise web applications that streamline academic approval workflows, document processing, and faculty subject and teaching load scheduling.",
+      "Developed and deployed an Activity Request & Document Tracking System for 40+ student organizations and hundreds of officers to cut approval turnaround by ~50% and eliminate repeat office visits through real-time tracking across a 5-stage approval chain.",
+      "Built and deployed a Teaching Load & Scheduling System centralizing the loads of 75 teachers across 7 departments and 36 sections to cut manual encoding time by ~70% and auto-validate all 242 section assignments against load caps.",
     ],
   },
   {
