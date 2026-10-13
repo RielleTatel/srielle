@@ -1,3 +1,5 @@
+export type Metric = { figure: string; label: string };
+
 export type Role = {
   id: string;
   company: string;
@@ -7,7 +9,12 @@ export type Role = {
   period?: string;
   city?: string;
   location?: string;
+  /** Headline numbers, shown first and largest. */
+  metrics: Metric[];
   highlights: string[];
+  stack?: string[];
+  /** Slugs from data/projects.ts, listed on the card in this order. */
+  projectSlugs?: string[];
 };
 
 export const experience: Role[] = [
@@ -19,11 +26,13 @@ export const experience: Role[] = [
     period: "May 2026 - July 2026",
     city: "Cebu City",
     location: "Cebu I.T. Park, Barangay Apas, Lahug, Cebu City",
+    metrics: [{ figure: "100,000+", label: "records per XLSX bulk import" }],
     highlights: [
-      "Enhanced and maintained production-ready web and mobile applications using Next.js, React Native, TypeScript, REST APIs, and RevenueCat.",
-      "Built a high-performance XLSX bulk import module capable of processing 100,000+ records, implementing hierarchical parent-child data mapping, validation, and optimized import workflows.",
-      "Resolved application defects, integrated new mobile features, and enhanced payment and subscription flows to improve application stability and user experience.",
+      "Built the bulk import: parent-child data mapping, validation, optimized workflows.",
+      "Fixed defects and shipped mobile features across web and mobile apps.",
+      "Improved payment and subscription flows for stability.",
     ],
+    stack: ["Next.js", "React Native", "TypeScript", "REST APIs", "RevenueCat"],
   },
   {
     id: "cits",
@@ -37,9 +46,15 @@ export const experience: Role[] = [
     period: "July 2026 - September 2026",
     city: "Zamboanga City",
     location: "La Purisima St., Zamboanga City 7000",
+    metrics: [
+      { figure: "~50%", label: "faster approvals" },
+      { figure: "~70%", label: "less manual encoding" },
+      { figure: "242", label: "sections auto-validated" },
+      { figure: "40+", label: "student orgs served" },
+    ],
     highlights: [
-      "Developed and deployed an Activity Request & Document Tracking System for 40+ student organizations and hundreds of officers to cut approval turnaround by ~50% and eliminate repeat office visits through real-time tracking across a 5-stage approval chain.",
-      "Built and deployed a Teaching Load & Scheduling System centralizing the loads of 75 teachers across 7 departments and 36 sections to cut manual encoding time by ~70% and auto-validate all 242 section assignments against load caps.",
+      "Activity Request & Document Tracking: real-time status across a 5-stage approval chain, no repeat office visits.",
+      "Teaching Load & Scheduling: 75 teachers, 7 departments, 36 sections in one place, checked against load caps.",
     ],
   },
   {
@@ -48,6 +63,8 @@ export const experience: Role[] = [
     title: "Freelance Software Developer",
     kind: "Freelance",
     logo: { src: "/logo-optimized.webp", alt: "Srielle logo" },
-    highlights: ["Independent software development for client projects."],
+    metrics: [],
+    highlights: [],
+    projectSlugs: ["autocare-plus", "council-of-organizations", "unyon-mindanao-portal"],
   },
 ];

@@ -17,7 +17,7 @@ export const socialProfiles = [
   },
 ];
 
-// A compact selection from the résumé and the existing homepage toolbox.
+// Résumé tools plus the stacks used across GitHub repos (checked 2026-10-13).
 // React and React Native share their official React mark.
 export const profileTools = [
   { name: "Next.js", logo: "/brand-icons/nextjs.svg" },
@@ -29,4 +29,14 @@ export const profileTools = [
   { name: "PostgreSQL", logo: "/brand-icons/postgresql.svg" },
   { name: "Firebase", logo: "/brand-icons/firebase.svg" },
   { name: "Docker", logo: "/brand-icons/docker.svg" },
+  { name: "Supabase", logo: "/brand-icons/supabase.svg" },
+  { name: "Tailwind CSS", logo: "/brand-icons/tailwindcss.svg" },
+  { name: "Vite", logo: "/brand-icons/vite.svg" },
+  { name: "NestJS", logo: "/brand-icons/nestjs.svg" },
+  { name: "Prisma", logo: "/brand-icons/prisma.svg" },
+  { name: "Expo", logo: "/brand-icons/expo.svg" },
+  { name: "Cloudflare", logo: "/brand-icons/cloudflare.svg" },
+  { name: "Vitest", logo: "/brand-icons/vitest.svg" },
+  { name: "PHP", logo: "/brand-icons/php.svg" },
+  { name: "C++", logo: "/brand-icons/cplusplus.svg" },
 ];

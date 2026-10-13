@@ -1,11 +1,12 @@
 import Image from "next/image";
-import { MapPin } from "lucide-react";
-import { ExperienceDetails } from "@/components/sections/ExperienceDetails";
-import { experience } from "@/data/experience";
+import Link from "next/link";
+import { ArrowUpRight, MapPin } from "lucide-react";
+import { experience, type Role } from "@/data/experience";
+import { projects } from "@/data/projects";
 import styles from "./Experience.module.css";
 
-// Static brand-led cards: DESIGN_VARIANCE 6, MOTION_INTENSITY 1,
-// VISUAL_DENSITY 3. Full descriptions open in a native dialog.
+// Brand-led cards, no modal: impact figures lead, a compressed summary and
+// the stack follow. Freelance lists its shipped projects instead of bullets.
 export function Experience() {
   return (
     <section
@@ -42,25 +43,81 @@ export function Experience() {
                   className={`${styles.logo} ${role.id === "freelance" ? styles.personalLogo : ""}`}
                 />
               )}
-
               <div className={styles.identity}>
                 <p className={styles.company}>{role.company}</p>
                 <h3 id={`experience-${role.id}-title`}>{role.title}</h3>
               </div>
             </header>
 
-            <div className={styles.cardFooter}>
-              {role.city && (
-                <p className={styles.location}>
-                  <MapPin size={14} strokeWidth={1.5} aria-hidden="true" />
-                  <span>{role.city}</span>
-                </p>
-              )}
-            </div>
-            <ExperienceDetails role={role} />
+            {role.city && (
+              <p className={styles.location} title={role.location}>
+                <MapPin size={14} strokeWidth={1.5} aria-hidden="true" />
+                <span>{role.city}</span>
+              </p>
+            )}
+
+            <RoleBody role={role} />
           </article>
         ))}
       </div>
     </section>
+  );
+}
+
+function RoleBody({ role }: { role: Role }) {
+  const roleProjects = (role.projectSlugs ?? [])
+    .map((slug) => projects.find((project) => project.slug === slug))
+    .filter((project) => project !== undefined);
+
+  return (
+    <>
+      {role.metrics.length > 0 && (
+        <dl className={styles.metrics}>
+          {role.metrics.map((metric) => (
+            <div key={metric.label} className={styles.metric}>
+              <dt className={styles.metricLabel}>{metric.label}</dt>
+              <dd className={styles.metricFigure}>{metric.figure}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {role.highlights.length > 0 && (
+        <ul className={styles.highlights}>
+          {role.highlights.map((highlight) => (
+            <li key={highlight}>{highlight}</li>
+          ))}
+        </ul>
+      )}
+
+      {roleProjects.length > 0 && (
+        <ul className={styles.projects}>
+          {roleProjects.map((project) => (
+            <li key={project.slug} className={styles.project}>
+              <div className={styles.projectCopy}>
+                <h4>{project.title}</h4>
+                <p>{project.tagline}</p>
+                <p className={styles.projectStack}>{project.services.join(", ")}</p>
+              </div>
+              <p className={styles.projectFigure}>{project.impact.figure}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {role.stack && (
+        <ul className={styles.stack} aria-label="Technologies used">
+          {role.stack.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      )}
+
+      {roleProjects.length > 0 && (
+        <Link href="/#projects" className={styles.more}>
+          See full case studies <ArrowUpRight size={15} strokeWidth={1.5} aria-hidden="true" />
+        </Link>
+      )}
+    </>
   );
 }
