@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { ArrowUpRight, X } from "lucide-react";
 
-const resumeUrl = "/resume/gabrielle-tatel-resume.pdf";
+const resumeUrl = "/resume/gabrielle-tatel-resume-2026-10.pdf";
 
 export function ResumeToggle() {
   const dialogRef = useRef<HTMLDialogElement>(null);
