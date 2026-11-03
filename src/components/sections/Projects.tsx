@@ -34,18 +34,26 @@ export function Projects() {
         />
       </FadeIn>
 
-      <ul id="project-list" className="flex flex-col gap-6">
-        {projects.map((project, index) => (
-          <li key={project.slug}>
-            <ScrollSlideIn from={index % 2 === 0 ? "left" : "right"}>
-              <ProjectCard
-                project={project}
-                reversed={index % 2 === 1}
-                onSelect={() => setSelectedProject(project)}
-              />
-            </ScrollSlideIn>
-          </li>
-        ))}
+      <ul id="project-list" className="grid gap-4 md:grid-cols-2 md:gap-5">
+        {projects.map((project, index) => {
+          const isFeatured = index === 0;
+          return (
+            <li key={project.slug} className={isFeatured ? "md:col-span-2" : undefined}>
+              <ScrollSlideIn
+                from={index % 2 === 0 ? "left" : "right"}
+                className="h-full"
+              >
+                <ProjectCard
+                  project={project}
+                  index={index}
+                  total={projects.length}
+                  featured={isFeatured}
+                  onSelect={() => setSelectedProject(project)}
+                />
+              </ScrollSlideIn>
+            </li>
+          );
+        })}
       </ul>
 
       {selectedProject && (

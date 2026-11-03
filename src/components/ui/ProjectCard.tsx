@@ -1,108 +1,96 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/data/projects";
 
 type ProjectCardProps = {
   project: Project;
-  reversed?: boolean;
+  index: number;
+  total: number;
+  featured?: boolean;
   onSelect: () => void;
 };
 
+const formatIndex = (value: number) => String(value).padStart(2, "0");
+
 export function ProjectCard({
   project,
-  reversed = false,
+  index,
+  total,
+  featured = false,
   onSelect,
 }: ProjectCardProps) {
   const image = project.image ?? project.images?.[0];
+  // The card surface, pills, and CTA are all derived from the project's own color.
+  const toneStyle = { "--tone": project.imageBackground } as CSSProperties;
 
   return (
-    <article className="group/project relative grid w-full overflow-hidden rounded-2xl border border-border bg-background/60 transition-colors duration-300 hover:border-accent/50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-accent motion-reduce:transition-none md:grid-cols-2">
+    <article
+      style={toneStyle}
+      className="group/project relative flex h-full flex-col rounded-[1.75rem] bg-[color-mix(in_oklab,var(--tone)_22%,var(--background))] p-2.5 focus-within:ring-2 focus-within:ring-accent sm:p-3"
+    >
       <button
         type="button"
         aria-label={`Open ${project.title} project details`}
         onClick={onSelect}
-        className="absolute inset-0 z-10 cursor-pointer rounded-2xl focus-visible:outline-4 focus-visible:outline-offset-[-4px] focus-visible:outline-accent"
+        className="absolute inset-0 z-10 cursor-pointer rounded-[1.75rem] focus-visible:outline-none"
       />
+
       <div
-        className={`pointer-events-none relative z-20 flex aspect-[4/3] items-center justify-center overflow-hidden md:aspect-auto md:min-h-[320px] ${
-          reversed ? "md:order-2" : ""
+        className={`pointer-events-none relative overflow-hidden rounded-[1.25rem] bg-[var(--tone)] ${
+          featured ? "aspect-[4/3] sm:aspect-[16/7]" : "aspect-[4/3]"
         }`}
-        style={{ backgroundColor: project.imageBackground }}
       >
         {image ? (
           <Image
             src={image.src}
             alt={image.alt}
             fill
-            sizes="(min-width: 1280px) 580px, (min-width: 768px) 50vw, 100vw"
+            sizes={
+              featured
+                ? "(min-width: 1280px) 1160px, 100vw"
+                : "(min-width: 1280px) 570px, (min-width: 768px) 50vw, 100vw"
+            }
             className={`${
               image.fit === "contain" ? "object-contain" : "object-cover"
-            } transition-transform duration-500 ease-out motion-reduce:transition-none group-hover/project:scale-[1.035]`}
+            } transition-transform duration-700 ease-out motion-reduce:transition-none group-hover/project:scale-[1.03]`}
           />
         ) : (
-          <div className="flex h-full w-full flex-col justify-between gap-8 p-7 text-[#1f3318] sm:p-10">
-            <span className="text-sm font-medium">{project.visualLabel ?? project.industry}</span>
-            <p className="max-w-[12ch] text-[clamp(2.75rem,5vw,5.5rem)] font-bold leading-[0.92] tracking-[-0.065em] [overflow-wrap:anywhere]">
-              {project.visualTitle ?? project.title}
-            </p>
-            <p className="max-w-sm border-t border-[#1f3318]/25 pt-3 text-base font-semibold leading-snug sm:text-lg">
-              {project.impact.figure ?? project.tagline}
-            </p>
-          </div>
+          <p className="absolute inset-x-8 bottom-8 text-[clamp(2.75rem,6vw,5.5rem)] font-semibold leading-[0.92] tracking-[-0.05em] text-white">
+            {project.visualTitle ?? project.title}
+          </p>
         )}
-        <span className="pointer-events-none absolute bottom-4 right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-full bg-background/95 px-4 text-sm font-medium text-foreground shadow-sm transition-[opacity,transform] duration-200 motion-reduce:transition-none md:translate-y-1 md:opacity-0 md:group-hover/project:translate-y-0 md:group-hover/project:opacity-100 md:group-focus-within/project:translate-y-0 md:group-focus-within/project:opacity-100">
-          View project
-          <ArrowUpRight aria-hidden="true" size={16} />
-        </span>
       </div>
 
-      <div
-        className={`pointer-events-none relative z-20 flex flex-col gap-5 px-5 py-8 md:px-6 md:py-10 ${
-          reversed ? "md:order-1" : ""
-        }`}
-      >
-        <h3 className="text-2xl font-bold tracking-tight text-foreground transition-colors duration-200 group-hover/project:text-accent group-focus-within/project:text-accent sm:text-3xl">
+      <div className="pointer-events-none flex flex-1 flex-col px-3 pb-3 pt-5 sm:px-5 sm:pb-5">
+        <p className="flex items-baseline gap-3 text-xs text-muted">
+          <span className="tabular-nums opacity-70">
+            {formatIndex(index + 1)}/{formatIndex(total)}
+          </span>
+          <span className="font-medium text-foreground/80">{project.industry}</span>
+        </p>
+
+        <h3 className="mt-2 text-[clamp(2rem,3.6vw,2.75rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-foreground">
           {project.title}
         </h3>
 
-        <p className="text-base italic text-accent">{project.tagline}</p>
-
-        <div className="border-l-[3px] border-accent pl-4">
-          <p className="mb-1 text-sm font-semibold text-accent">Impact</p>
-          {image && project.impact.figure && (
-            <p className="mb-1 text-xl font-bold leading-tight text-foreground">
-              {project.impact.figure}
-            </p>
-          )}
-          <p className="text-lg font-medium leading-snug text-foreground">
-            {project.impact.result}
-          </p>
-        </div>
-
-        <p className="text-base leading-relaxed text-muted">
-          {project.description}
+        <p className="mt-2 max-w-[60ch] text-base leading-snug text-muted">
+          {project.impact.result}
         </p>
 
-        <div className="mt-auto flex items-end justify-between gap-4">
-          <div className="flex flex-col gap-1 text-xs text-muted">
-            <span>{project.services.join(", ")}</span>
-            {project.industry && <span>{project.industry}</span>}
-          </div>
-          {project.url && (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group/cta pointer-events-auto relative inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-3 text-sm font-medium text-foreground transition-colors hover:bg-foreground/5 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        <div className="mt-auto flex flex-wrap items-center gap-2 pt-6">
+          {project.services.map((service) => (
+            <span
+              key={service}
+              className="inline-flex min-h-8 items-center rounded-full border border-[color-mix(in_oklab,var(--tone)_45%,var(--foreground)_25%)] px-3 text-xs text-foreground/85"
             >
-              View case study
-              <ArrowUpRight
-                aria-hidden="true"
-                size={16}
-                className="transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
-              />
-            </a>
-          )}
+              {service}
+            </span>
+          ))}
+          <span className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-[color-mix(in_oklab,var(--tone)_62%,black)] px-3.5 text-xs font-medium text-white transition-transform duration-200 motion-reduce:transition-none group-hover/project:-translate-y-0.5">
+            View project
+            <ArrowUpRight aria-hidden="true" size={14} />
+          </span>
         </div>
       </div>
     </article>
