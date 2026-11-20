@@ -24,7 +24,7 @@ export function About() {
           <h1 id="about-name">Gabrielle Tatel</h1>
           <p>I&apos;m a full-stack developer building products and the communities around them.</p>
           <div className="about-intro-links">
-            <Link href="/#projects" className="about-link">
+            <Link href="/projects" className="about-link">
               View projects <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden />
             </Link>
             <Link href="/#contact" className="about-link">

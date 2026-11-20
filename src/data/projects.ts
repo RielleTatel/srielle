@@ -26,9 +26,10 @@ export type Project = {
   visualTitle?: string;
   visualLabel?: string;
   url?: string;
+  repositoryUrl?: string;
 };
 
-export const projects: Project[] = [
+export const featuredProjects: Project[] = [
   {
     slug: "autocare-plus",
     title: "AutoCare+",
@@ -70,6 +71,7 @@ export const projects: Project[] = [
       },
     ],
     imageBackground: "#90433e",
+    repositoryUrl: "https://github.com/RielleTatel/autocare",
   },
   {
     slug: "council-of-organizations",
@@ -118,6 +120,7 @@ export const projects: Project[] = [
       },
     ],
     imageBackground: "#8dc5e9",
+    repositoryUrl: "https://github.com/RielleTatel/council-of-organizations",
   },
   {
     slug: "unyon-mindanao-portal",
@@ -156,5 +159,73 @@ export const projects: Project[] = [
       },
     ],
     imageBackground: "#5a7961",
+    repositoryUrl: "https://github.com/RielleTatel/unyon-mindanao",
+  },
+];
+
+export const projects: Project[] = [
+  ...featuredProjects,
+  {
+    slug: "debately",
+    title: "Debately",
+    tagline: "Debate tournament management, built by a debater.",
+    description:
+      "Debately gives tournament organizers a workspace to manage institutions, teams, and adjudicators, track requests, and publish announcements. Organizers can import institution records from a CSV and see which institutions have claimed their registrations.",
+    impact: {
+      result: "Brings tournament registration and administration into one dashboard.",
+    },
+    services: ["Next.js", "Supabase", "Prisma", "PostgreSQL"],
+    industry: "Debate tournaments",
+    image: {
+      src: "/projects/debately-cover.webp",
+      alt: "Debately tournament dashboard showing the Institutions tab",
+      width: 900,
+      height: 563,
+      fit: "contain",
+    },
+    imageBackground: "#e8e6f8",
+    repositoryUrl: "https://github.com/RielleTatel/debately",
+  },
+  {
+    slug: "horario",
+    title: "Horario",
+    tagline: "Teaching load and timetable planning for a junior high school.",
+    description:
+      "Built for Ateneo de Zamboanga University Junior High School, Horario lets department chairs review teaching assignments and lets administrators generate and approve regular and special timetables.",
+    impact: {
+      result: "Gives department chairs and administrators one place to review teaching loads and publish schedules.",
+    },
+    services: ["Laravel", "Alpine.js", "Tailwind", "MySQL"],
+    industry: "Academic scheduling",
+    image: {
+      src: "/projects/horario-cover.webp",
+      alt: "Horario sign-in screen with calendar and timetable illustrations",
+      width: 900,
+      height: 563,
+      fit: "contain",
+    },
+    imageBackground: "#17167f",
+    repositoryUrl: "https://github.com/RielleTatel/load-and-scheduling-system",
+  },
+  {
+    slug: "osa-activity-tracking",
+    title: "OSA Activity Tracking",
+    tagline: "Online activity requests and document tracking for student organizations.",
+    description:
+      "The Office of Student Affairs system lets organization officers submit activity requests and track their documents. Moderators can endorse requests, and office staff can verify requirements and update the status as each request moves through approval.",
+    impact: {
+      result: "Makes it easier for student organizations to see what’s submitted, what’s missing, and what’s next.",
+    },
+    services: ["Laravel", "PHP", "Tailwind", "MySQL"],
+    industry: "Student affairs",
+    image: {
+      src: "/projects/osa-cover.webp",
+      alt: "OSA request dashboard with approval stages and a document checklist",
+      width: 900,
+      height: 563,
+      fit: "contain",
+    },
+    imageBackground: "#d8e3f7",
+    repositoryUrl: "https://github.com/RielleTatel/osa-system",
   },
 ];

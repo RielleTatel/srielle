@@ -8,6 +8,7 @@ type ProjectCardProps = {
   index: number;
   total: number;
   featured?: boolean;
+  heading?: "h2" | "h3";
   onSelect: () => void;
 };
 
@@ -18,6 +19,7 @@ export function ProjectCard({
   index,
   total,
   featured = false,
+  heading: Heading = "h3",
   onSelect,
 }: ProjectCardProps) {
   const image = project.image ?? project.images?.[0];
@@ -70,9 +72,9 @@ export function ProjectCard({
           <span className="font-medium text-foreground/80">{project.industry}</span>
         </p>
 
-        <h3 className="mt-2 text-[clamp(2rem,3.6vw,2.75rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-foreground">
+        <Heading className="mt-2 text-[clamp(2rem,3.6vw,2.75rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-foreground">
           {project.title}
-        </h3>
+        </Heading>
 
         <p className="mt-2 max-w-[60ch] text-base leading-snug text-muted">
           {project.impact.result}

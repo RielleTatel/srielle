@@ -1,24 +1,12 @@
-"use client";
-
-import { useState } from "react";
-import dynamic from "next/dynamic";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { FadeText } from "@/components/ui/FadeText";
-import { ProjectCard } from "@/components/ui/ProjectCard";
-import { ScrollSlideIn } from "@/components/ui/ScrollSlideIn";
+import { ProjectGrid } from "@/components/ui/ProjectGrid";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { projects, type Project } from "@/data/projects";
-
-const ProjectModal = dynamic(
-  () =>
-    import("@/components/ui/ProjectModal").then(
-      (module) => module.ProjectModal,
-    ),
-);
+import { featuredProjects } from "@/data/projects";
 
 export function Projects() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
   return (
     <section id="projects" className="mx-auto max-w-7xl px-6 pb-16 pt-15 sm:px-10 lg:px-15">
       <FadeIn>
@@ -34,34 +22,17 @@ export function Projects() {
         />
       </FadeIn>
 
-      <ul id="project-list" className="grid gap-4 md:grid-cols-2 md:gap-5">
-        {projects.map((project, index) => {
-          const isFeatured = index === 0;
-          return (
-            <li key={project.slug} className={isFeatured ? "md:col-span-2" : undefined}>
-              <ScrollSlideIn
-                from={index % 2 === 0 ? "left" : "right"}
-                className="h-full"
-              >
-                <ProjectCard
-                  project={project}
-                  index={index}
-                  total={projects.length}
-                  featured={isFeatured}
-                  onSelect={() => setSelectedProject(project)}
-                />
-              </ScrollSlideIn>
-            </li>
-          );
-        })}
-      </ul>
+      <ProjectGrid projects={featuredProjects} featureFirst />
 
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
+      <div className="mt-7 flex justify-end">
+        <Link
+          href="/projects"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-accent/60 bg-background px-5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-background focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        >
+          View all projects
+          <ArrowUpRight aria-hidden="true" size={16} />
+        </Link>
+      </div>
     </section>
   );
 }

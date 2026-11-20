@@ -287,6 +287,17 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   View case study
                 </a>
               )}
+              {project.repositoryUrl && (
+                <a
+                  href={project.repositoryUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-accent/60 px-5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-background focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                >
+                  View on GitHub
+                  <ArrowUpRight aria-hidden="true" size={16} />
+                </a>
+              )}
             </div>
           </div>
         </>

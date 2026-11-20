@@ -18,7 +18,7 @@ export default function AboutPage() {
         <nav aria-label="Explore more" className="about-footer">
           <p>Explore the work behind these stories.</p>
           <div>
-            <Link href="/#projects" className="about-link">
+            <Link href="/projects" className="about-link">
               View projects <ArrowUpRight size={15} strokeWidth={1.5} aria-hidden />
             </Link>
             <Link href="/#contact" className="about-link">

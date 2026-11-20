@@ -9,7 +9,7 @@ import { scrollToAnchor } from "@/lib/scroll";
 
 const NAV_LINKS = [
   { href: "/#hero", label: "Home" },
-  { href: "/#projects", label: "Projects" },
+  { href: "/projects", label: "Projects" },
   { href: "/about", label: "About" },
   { href: "/#tech-stack", label: "Tools", desktopOnly: true },
   { href: "/#contact", label: "Contact" },
