@@ -228,4 +228,46 @@ export const projects: Project[] = [
     imageBackground: "#d8e3f7",
     repositoryUrl: "https://github.com/RielleTatel/osa-system",
   },
+  {
+    slug: "amf-ticketing",
+    title: "Ateneo Music Festival Ticketing",
+    tagline: "Ticket sales and offline gate check-in for Ateneo Music Festival 2026.",
+    description:
+      "The festival ticketing system tracks orders, availability, and waitlists in Google Sheets and emails QR tickets as PDFs. At the venue, an offline scanner checks each ticket against the assigned gate and flags tickets that have already been used.",
+    impact: {
+      result: "Connects online ticket sales with QR check-in that works without internet at the gate.",
+    },
+    services: ["Apps Script", "Google Sheets", "Node.js", "SQLite"],
+    industry: "Music festival ticketing",
+    image: {
+      src: "/projects/amf-ticketing-cover.webp",
+      alt: "Ateneo Music Festival 2026 poster with colorful ribbons of light",
+      width: 720,
+      height: 720,
+      fit: "contain",
+    },
+    imageBackground: "#3c254c",
+    repositoryUrl: "https://github.com/RielleTatel/event-ticketing-systems/tree/main/apps-script/ateneo-music-festival",
+  },
+  {
+    slug: "aao-doomsday-ticketing",
+    title: "Avengers: Doomsday Ticketing",
+    tagline: "Reservations and ticket delivery for AAO’s private screening.",
+    description:
+      "Built for the Accountancy Academic Organization’s private screening, the system handles booking packages, holds, waitlisting, payment review, and QR ticket delivery by email. Playwright scripts accompany the booking form workflow.",
+    impact: {
+      result: "Tracks each booking from reservation and payment review through ticket delivery.",
+    },
+    services: ["Apps Script", "Google Forms", "Google Sheets", "Playwright"],
+    industry: "Screening ticketing",
+    image: {
+      src: "/projects/aao-ticketing-cover.webp",
+      alt: "Avengers: Doomsday Arrives poster for the AAO screening",
+      width: 720,
+      height: 720,
+      fit: "contain",
+    },
+    imageBackground: "#414535",
+    repositoryUrl: "https://github.com/RielleTatel/event-ticketing-systems/tree/main/apps-script/avengers-doomsday",
+  },
 ];
